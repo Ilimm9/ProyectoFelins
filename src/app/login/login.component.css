@@ -25,6 +25,7 @@
     background-color: #ef932bd0;
 }
 .card { 
+    background-color: rgba(240, 248, 255, 0.91);
     /* Agrega sombra para crear el efecto de "tarjeta" */
     box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s; /* Transición suave al pasar el mouse */
