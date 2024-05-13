@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../componentes/header/header.component';
+
+import { NavbarVerticalComponent } from '../componentes/navbar-vertical/navbar-vertical.component';
 
 @Component({
   selector: 'app-disenio',
   standalone: true,
-  imports: [HeaderComponent],
+
+  imports: [NavbarVerticalComponent],
   templateUrl: './disenio.component.html',
   styleUrl: './disenio.component.css'
 })
