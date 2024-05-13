@@ -1,0 +1,258 @@
+<!-- listado Empleados-->
+<section id="clientes">
+  <div class="container my-10">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="mt-2">
+              <h4>
+                <i class="fa-solid fa-users mx-2"></i> Listado de Empleados
+              </h4>
+            </div>
+            <div class="ml-auto">
+              <a
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <i class="fa-solid fa-plus"></i> Agregar
+              </a>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-nowrap">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>telefono</th>
+                  <th>Departamento</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (empleado of empleados; track empleado.idUsuario) {
+                <tr>
+                  <td>{{ empleado.idUsuario }}</td>
+                  <td>
+                    {{ empleado.nombre }} {{ empleado.apPaterno }}
+                    {{ empleado.apMaterno }}
+                  </td>
+                  <td>{{ empleado.email }}</td>
+                  <td>{{ empleado.telefono }}</td>
+                  <td>
+                    {{ obtenerNombresDepartamentos(empleado.departamentos) }}
+                  </td>
+                  <td>
+                    <a class="btn btn-primary">
+                      <i class="fas fa-angle-double-right"></i> Editar
+                    </a>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal para agregar Empleados -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Agregar Empleado
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" />
+          </div>
+          <div class="mb-3">
+            <label for="apPaterno" class="form-label">Apellido Paterno</label>
+            <input type="text" class="form-control" id="apPaterno" />
+          </div>
+          <div class="mb-3">
+            <label for="apMaterno" class="form-label">Apellido Materno</label>
+            <input type="text" class="form-control" id="apMaterno" />
+          </div>
+          <div class="mb-3">
+            <label for="domicilioActual" class="form-label"
+              >Domicilio Actual</label
+            >
+            <input type="text" class="form-control" id="domicilioActual" />
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" />
+          </div>
+          <div class="mb-3">
+            <label for="usuario" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="usuario" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" />
+          </div>
+          <div class="mb-3">
+            <label for="fechaAlta" class="form-label">Fecha de Alta</label>
+            <input type="date" class="form-control" id="fechaAlta" />
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="activo" />
+            <label class="form-check-label" for="activo">Activo</label>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- listado Clientes-->
+<section id="clientes">
+  <div class="container my-10">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="mt-2">
+              <h4>
+                <i class="fa-solid fa-users mx-2"></i> Listado de Clientes
+              </h4>
+            </div>
+            <div class="ml-auto">
+              <a
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalClientes"
+              >
+                <i class="fa-solid fa-plus"></i> Agregar
+              </a>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-nowrap">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>telefono</th>
+                  <th>Ordenes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (cliente of clientes; track cliente.idUsuario) {
+                <tr>
+                  <td>{{ cliente.idUsuario }}</td>
+                  <td>
+                    {{ cliente.nombre }} {{ cliente.apPaterno }}
+                    {{ cliente.apMaterno }}
+                  </td>
+                  <td>{{ cliente.email }}</td>
+                  <td>{{ cliente.telefono }}</td>
+                  <td>{{ cliente.totalCompras }}</td>
+                  <td>
+                    <a class="btn btn-primary">
+                      <i class="fas fa-angle-double-right"></i> Editar
+                    </a>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- listado de Departamentos-->
+<section id="clientes">
+  <div class="container my-10">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="mt-2">
+              <h4>
+                <i class="fa-solid fa-building"></i> Listado de Departamentos
+              </h4>
+            </div>
+            <div class="ml-auto">
+              <a
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalDeptos"
+              >
+                <i class="fa-solid fa-plus"></i> Agregar
+              </a>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-nowrap">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Descripcion</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (depto of departamentos; track depto.idDepto) {
+                <tr>
+                  <td>{{ depto.idDepto }}</td>
+                  <td>{{ depto.nombre }}</td>
+                  <td>{{ depto.descripcion }}</td>
+                  <td>
+                    <a class="btn btn-primary">
+                      <i class="fas fa-angle-double-right"></i> Editar
+                    </a>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

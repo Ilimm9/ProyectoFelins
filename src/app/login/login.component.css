@@ -15,6 +15,19 @@
     
 }
 
+.fondo2{
+        background-image: linear-gradient(
+            0deg,
+            rgba(108, 98, 98, 0.142),
+            rgba(211, 209, 209, 0.5)
+        )
+        ,url("../../assets/resources/felinus2.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    
+}
+
 .btn {
     background-color: #ef932bd0;
     border: #FB8500;
