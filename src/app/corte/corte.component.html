@@ -1,0 +1,621 @@
+<nav class="navbar bg-body-tertiary fixed-top align-items-center">
+    <div class="container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <a class="navbar-brand">CORTE</a>
+  
+      <!-- iconos de perfil y notificaciones  -->
+      <ul class="navbar-right-wrap d-flex nav-top-wrap" style="list-style: none">
+        <li class="dropdown stopevent">
+          <a
+            class="btn btn-light btn-icon rounded-circle indicator indicator-primary text-muted"
+            href="#"
+            role="button"
+            id="dropdownNotification"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="icon-xs" data-feather="bell"></i>
+          </a>
+          <div
+            class="dropdown-menu dropdown-menu-lg dropdown-menu-end"
+            aria-labelledby="dropdownNotification"
+          >
+            <div>
+              <div
+                class="border-bottom px-3 pt-2 pb-3 d-flex justify-content-between align-items-center"
+              >
+                <p class="mb-0 text-dark fw-medium fs-4">Notifications</p>
+                <a href="#" class="text-muted">
+                  <span>
+                    <i class="me-1 icon-xxs" data-feather="settings"></i>
+                  </span>
+                </a>
+              </div>
+              <!-- List group -->
+              <ul class="list-group list-group-flush notification-list-scroll">
+                <!-- List group item -->
+                <li class="list-group-item">
+                  <a href="#" class="text-muted">
+                    <h5 class="mb-1">Sina Ray</h5>
+                    <p class="mb-0">
+                      Sed aliquam augue sit amet mauris volutpat hendrerit sed
+                      nunc eu diam.
+                    </p>
+                  </a>
+                </li>
+              </ul>
+              <div class="border-top px-3 py-2 text-center">
+                <a href="#" class="text-inherit fw-semi-bold">
+                  View all Notifications
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <!-- List -->
+        <li class="dropdown ms-2">
+          <a
+            class="rounded-circle"
+            href="#"
+            role="button"
+            id="dropdownUser"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <div class="avatar avatar-md avatar-indicators avatar-online">
+              <img
+                alt="avatar"
+                src="../../../assets/images/avatar/avatar-1.jpg"
+                class="rounded-circle"
+              />
+            </div>
+          </a>
+          <div
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="dropdownUser"
+          >
+            <div class="px-4 pb-0 pt-2">
+              <div class="lh-1">
+                <h5 class="mb-1">John E. Grainger</h5>
+                <a href="#" class="text-inherit fs-6">View my profile</a>
+              </div>
+              <div class="dropdown-divider mt-3 mb-2"></div>
+            </div>
+  
+            <ul class="list-unstyled">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i
+                    class="me-2 icon-xxs dropdown-item-icon"
+                    data-feather="user"
+                  ></i
+                  >Edit Profile
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i
+                    class="me-2 icon-xxs dropdown-item-icon"
+                    data-feather="settings"
+                  ></i
+                  >Account Settings
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="@@webRoot/index.html">
+                  <i
+                    class="me-2 icon-xxs dropdown-item-icon"
+                    data-feather="power"
+                  ></i
+                  >Sign Out
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+  
+      <div
+        class="offcanvas offcanvas-start navbar-vertical"
+        id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel"
+      >
+        <div class="offcanvas-body">
+          <!-- Sidebar -->
+          <!-- <nav class="navbar-vertical navbar"> -->
+          <div class="nav-scroller">
+            <!-- Brand logo -->
+            <a class="navbar-brand" href="../index.html">
+              <img style="width: 100%;" src="../../assets/resources/LogoNegro.jpg" alt="" />
+            </a>
+            <!-- Navbar nav -->
+            <ul class="navbar-nav flex-column" id="sideNavbar">
+              <li class="nav-item">
+                <a
+                  class="nav-link has-arrow @@if (context.page === 'dashboard') { active }"
+                  href="../index.html"
+                >
+                  <i data-feather="home" class="nav-icon icon-xs me-2"></i> INICIO
+                </a>
+              </li>
+  
+              <!-- Nav item -->
+              <li class="nav-item">
+                <div class="navbar-heading">Acciones</div>
+              </li>
+  
+              <!-- Nav item -->
+              <li class="nav-item">
+                <a
+                  class="nav-link has-arrow @@if (context.page_group !== 'pages') { collapsed }"
+                  href="#!"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navPages"
+                  aria-expanded="false"
+                  aria-controls="navPages"
+                >
+                  <i data-feather="layers" class="nav-icon icon-xs me-2"> </i>
+                  Herramientas
+                </a>
+  
+                <div
+                  id="navPages"
+                  class="collapse @@if (context.page_group === 'pages') { show }"
+                  data-bs-parent="#sideNavbar"
+                >
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a
+                        class="nav-link @@if (context.page === 'profile') { active }"
+                        href="../../pages/profile.html"
+                      >
+                        Profile
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a
+                        class="nav-link has-arrow @@if (context.page === 'settings') { active }"
+                        href="../../pages/settings.html"
+                      >
+                        Historial
+                      </a>
+                    </li>
+  
+                    <li class="nav-item">
+                      <a
+                        class="nav-link @@if (context.page === 'billing') { active }"
+                        href="../../pages/billing.html"
+                      >
+                        Comunicacion
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+  
+              <!-- Nav item -->
+              <li class="nav-item">
+                <a
+                  class="nav-link @@if (context.page === 'layouts') { active }"
+                  href="../../pages/layout.html"
+                >
+                  <i data-feather="sidebar" class="nav-icon icon-xs me-2"> </i>
+                  Incidencias
+                </a>
+              </li>
+  
+              <!-- Nav item -->
+              <li class="nav-item">
+                <div class="navbar-heading">Documentation</div>
+              </li>
+  
+              <!-- Nav item -->
+              <li class="nav-item">
+                <a
+                  class="nav-link has-arrow @@if (context.page === 'docs') { active }"
+                  href="@@webRoot/docs/index.html"
+                >
+                  <i data-feather="clipboard" class="nav-icon icon-xs me-2"> </i>
+                  Docs
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- </nav> -->
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Container fluid -->
+  <div class="bg-primary pt-20 pb-21"></div>
+  <div class="container-fluid mt-n22 px-6">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-12">
+        <!-- Page header -->
+        <div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="mb-2 mb-lg-0">
+              <h3 class="mb-0 text-white">Tareas</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-6 col-md-12 col-12 mt-6">
+        <!-- card -->
+        <div class="card">
+          <!-- card body -->
+          <div class="card-body">
+            <!-- heading -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="mb-0">Proyectos</h4>
+              </div>
+              <div
+                class="icon-shape icon-md bg-light-primary text-primary rounded-2"
+              >
+                <i class="bi bi-briefcase fs-4"></i>
+              </div>
+            </div>
+            <!-- project number -->
+            <div>
+              <h1 class="fw-bold">18</h1>
+              <p class="mb-0"><span class="text-dark me-2">2</span>Completados</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-6 col-md-12 col-12 mt-6">
+        <!-- card -->
+        <div class="card">
+          <!-- card body -->
+          <div class="card-body">
+            <!-- heading -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="mb-0">Tareas</h4>
+              </div>
+              <div
+                class="icon-shape icon-md bg-light-primary text-primary rounded-2"
+              >
+                <i class="bi bi-people fs-4"></i>
+              </div>
+            </div>
+            <!-- project number -->
+            <div>
+              <h1 class="fw-bold">12</h1>
+              <p class="mb-0"><span class="text-dark me-2">1</span>Completados</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-6 col-md-12 col-12 mt-6">
+        <!-- card -->
+        <div class="card">
+          <!-- card body -->
+          <div class="card-body">
+            <!-- heading -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="mb-0">Avance Semanal</h4>
+              </div>
+              <div
+                class="icon-shape icon-md bg-light-primary text-primary rounded-2"
+              >
+                <i class="bi bi-bullseye fs-4"></i>
+              </div>
+            </div>
+            <!-- project number -->
+            <div>
+              <h1 class="fw-bold">76%</h1>
+              <p class="mb-0">
+                <span class="text-success me-2">5%</span>Completado
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- row  -->
+    <div class="row mt-6">
+      <div class="col-md-12 col-12">
+        <!-- card  -->
+        <div class="card">
+          <!-- card header  -->
+          <div class="card-header bg-white py-4">
+            <h4 class="mb-0">Pendientes</h4>
+          </div>
+          <!-- table  -->
+          <div class="table-responsive">
+            <table class="table text-nowrap mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Nombre del proyecto</th>
+                  <th>Horas</th>
+                  <th>Prioridad</th>
+                  <th>Integrantes</th>
+                  <th>Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <div class="icon-shape icon-md border p-4 rounded-1">
+                          <img src="" alt="" />
+                        </div>
+                      </div>
+                      <div class="ms-3 lh-1">
+                        <h5 class="mb-1">
+                          <a href="#" class="text-inherit">Uniformes COBAO</a>
+                        </h5>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="align-middle">34</td>
+                  <td class="align-middle">
+                    <span class="badge bg-warning">Medium</span>
+                  </td>
+                  <td class="align-middle">
+                    <div class="avatar-group">
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-1.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-2.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-3.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm avatar-primary">
+                        <span class="avatar-initials rounded-circle fs-6"
+                          >+5</span
+                        >
+                      </span>
+                    </div>
+                  </td>
+                  <td class="align-middle text-dark">
+                    <div class="float-start me-3">15%</div>
+                    <div class="mt-2">
+                      <div class="progress" style="height: 5px">
+                        <div
+                          class="progress-bar"
+                          role="progressbar"
+                          style="width: 15%"
+                          aria-valuenow="15"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <div class="icon-shape icon-md border p-4 rounded-1">
+                          <img src="" alt="" />
+                        </div>
+                      </div>
+                      <div class="ms-3 lh-1">
+                        <h5 class="mb-1">
+                          <a href="#" class="text-inherit">Uniformes 64</a>
+                        </h5>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="align-middle">47</td>
+                  <td class="align-middle">
+                    <span class="badge bg-danger">High</span>
+                  </td>
+                  <td class="align-middle">
+                    <div class="avatar-group">
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-4.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-5.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm">
+                        <img
+                          alt="avatar"
+                          src="assets/images/avatar/avatar-6.jpg"
+                          class="rounded-circle"
+                        />
+                      </span>
+                      <span class="avatar avatar-sm avatar-primary">
+                        <span class="avatar-initials rounded-circle fs-6"
+                          >+5</span
+                        >
+                      </span>
+                    </div>
+                  </td>
+                  <td class="align-middle text-dark">
+                    <div class="float-start me-3">35%</div>
+                    <div class="mt-2">
+                      <div class="progress" style="height: 5px">
+                        <div
+                          class="progress-bar"
+                          role="progressbar"
+                          style="width: 35%"
+                          aria-valuenow="35"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- card footer  -->
+          <div class="card-footer bg-white text-center">
+            <a href="#" class="link-primary">Ver Todos los Proyectos </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- row  -->
+    <div class="row my-6">
+      <div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-6 mb-xl-0">
+        <!-- card  -->
+        <div class="card h-100">
+          <!-- card body  -->
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h4 class="mb-0">Progreso</h4>
+              </div>
+            </div>
+            <!-- chart  -->
+            <div class="mb-8">
+              <div id="perfomanceChart"></div>
+            </div>
+            <!-- icon with content  -->
+            <div class="d-flex align-items-center justify-content-around">
+              <div class="text-center">
+                <i class="icon-sm text-success" data-feather="check-circle"></i>
+                <h1 class="mt-3 mb-1 fw-bold">76%</h1>
+                <p>Completado</p>
+              </div>
+              <div class="text-center">
+                <i class="icon-sm text-warning" data-feather="trending-up"></i>
+                <h1 class="mt-3 mb-1 fw-bold">32%</h1>
+                <p>En-Progreso</p>
+              </div>
+              <div class="text-center">
+                <i class="icon-sm text-danger" data-feather="trending-down"></i>
+                <h1 class="mt-3 mb-1 fw-bold">13%</h1>
+                <p>Terminado</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- card  -->
+      <div class="col-xl-8 col-lg-12 col-md-12 col-12">
+        <div class="card h-100">
+          <!-- card header  -->
+          <div class="card-header bg-white py-4">
+            <h4 class="mb-0">Equipos</h4>
+          </div>
+          <!-- table  -->
+          <div class="table-responsive">
+            <table class="table text-nowrap">
+              <thead class="table-light">
+                <tr>
+                  <th>Nombre</th>
+                  <th>Área de trabajo</th>
+                  <th>Última conexión</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <img
+                          src=""
+                          alt=""
+                          class="avatar-md avatar rounded-circle"
+                        />
+                      </div>
+                      <div class="ms-3 lh-1">
+                        <h5 class="mb-1">Pedro López</h5>
+                        <!-- <p class="mb-0">anita@example.com</p> -->
+                      </div>
+                    </div>
+                  </td>
+                  <td class="align-middle">Front End Developer</td>
+                  <td class="align-middle">3 May, 2023</td>
+                  <td class="align-middle"></td>
+                </tr>
+                <tr>
+                  <td class="align-middle border-bottom-0">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <img
+                          src="assets/images/avatar/avatar-6.jpg"
+                          alt=""
+                          class="avatar-md avatar rounded-circle"
+                        />
+                      </div>
+                      <div class="ms-3 lh-1">
+                        <h5 class="mb-1">George de la Selva</h5>
+                        <!-- <p class="mb-0">darshininair@example.com</p> -->
+                      </div>
+                    </div>
+                  </td>
+                  <td class="align-middle border-bottom-0">
+                    Front End Developer
+                  </td>
+                  <td class="align-middle border-bottom-0">3 May, 2023</td>
+                  <td class="align-middle border-bottom-0">
+                    <div class="dropdown dropstart">
+                      <a
+                        class="text-muted text-primary-hover"
+                        href="#"
+                        role="button"
+                        id="dropdownTeamSix"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <i class="icon-xxs" data-feather="more-vertical"></i>
+                      </a>
+  
+                      <div
+                        class="dropdown-menu"
+                        aria-labelledby="dropdownTeamSix"
+                      >
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
