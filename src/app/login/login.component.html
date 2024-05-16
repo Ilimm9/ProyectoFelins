@@ -5,30 +5,34 @@
         <h4>Bienvenido</h4>
       </div>
       <div class="card-body">
-        <form>  
+        <form (submit)="login()">
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Usuario</label>
+            <label for="email" class="form-label">Usuario</label>
             <input
               type="email"
               class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              id="email"
+              name="email"
+              [(ngModel)]="usuario"
             />
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"
-              >Contraseña</label
-            >
+            <label for="password" class="form-label">Contraseña</label>
             <input
               type="password"
               class="form-control"
-              id="exampleInputPassword1"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
             />
           </div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary">
-              Iniciar sesión
-            </button>
+          <div class="card-footer">
+            <div class="text-center">
+              <jjwins-alert-messages> </jjwins-alert-messages>
+              <button type="submit" class="btn btn-primary">
+                Iniciar sesión
+              </button>
+            </div>
           </div>
         </form>
       </div>

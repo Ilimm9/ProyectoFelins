@@ -21,6 +21,7 @@
     "@ionic/angular": "^8.1.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "jjwins-angular-alert-messages": "^2.0.2",
     "jquery": "^3.7.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
