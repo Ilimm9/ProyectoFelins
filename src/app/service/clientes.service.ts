@@ -10,9 +10,27 @@ export class ClientesService {
 
   private urlBase = "http://localhost:8080/felinus-app/clientes"
 
-  constructor(private ClienteHttp: HttpClient) { }
+  constructor(private clienteHttp: HttpClient) { }
 
   obtenerClientes(): Observable<Cliente[]> {
-    return this.ClienteHttp.get<Cliente[]>(this.urlBase);
+    return this.clienteHttp.get<Cliente[]>(this.urlBase);
   }
+
+  agregarCliente(cliente: Cliente): Observable<Object>{
+    return this.clienteHttp.post(this.urlBase, cliente);
+  }
+
+  obtenerClientePorId(id: number){
+    return this.clienteHttp.get<Cliente>(`${this.urlBase}/${id}`);
+  }
+
+  editarCliente(id: number, cliente: Cliente): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${id}`, cliente);
+  }
+
+  eliminarCliente(id: number): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  }
+
+
 }

@@ -15,4 +15,21 @@ export class EmpleadosService {
   obtenerEmpleados():Observable<Empleado[]> {
     return this.clienteHttp.get<Empleado[]>(this.urlBase);
   }
+
+  agregarEmpleado(empleado: Empleado): Observable<Object>{
+    return this.clienteHttp.post(this.urlBase, empleado);
+  }
+
+  obtenerEmpleadoPorId(id: number){
+    return this.clienteHttp.get<Empleado>(`${this.urlBase}/${id}`);
+  }
+
+  editarEmpleado(id: number, empleado: Empleado): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${id}`, empleado);
+  }
+
+  eliminarEmpleado(id: number): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  }
+
 }

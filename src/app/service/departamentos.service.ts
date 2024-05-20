@@ -15,4 +15,21 @@ export class DepartamentosService {
   obtenerDepartamentos():Observable<Departamento[]> {
     return this.clienteHttp.get<Departamento[]>(this.urlBase);
   }
+
+  agregarDepartamento(departamento: Departamento): Observable<Object>{
+    return this.clienteHttp.post(this.urlBase, departamento);
+  }
+
+  obtenerDepartamentoPorId(id: number){
+    return this.clienteHttp.get<Departamento>(`${this.urlBase}/${id}`);
+  }
+
+  editarDepartamento(id: number, departamento: Departamento): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${id}`, departamento);
+  }
+
+  eliminarDepartamento(id: number): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  }
+
 }
