@@ -9,11 +9,12 @@ import { Cliente } from '../../models/cliente';
 import { Empleado } from '../../models/empleado';
 import { EmpleadosService } from '../../service/empleados.service';
 import { ClientesService } from '../../service/clientes.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-ordenes',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe ],
   templateUrl: './ordenes.component.html',
   styleUrl: './ordenes.component.css'
 })
@@ -230,6 +231,16 @@ export class OrdenesComponent {
     );
   }
 
+  yaEstaEnOrden(prenda: Prenda): boolean{
+    for( let p of this.ordenes){
+      if(p.prenda.idPrenda == prenda.idPrenda){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  
   
 
 

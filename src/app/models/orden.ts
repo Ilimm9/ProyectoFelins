@@ -9,8 +9,8 @@ export class Orden {
     prenda: Prenda;
     fechaInicio: Date;
     fechaEntrega: Date;
-    etapa: string;
-    estado: string;
-    total : number;
+    etapa: string; //disenio, corte, sublimacion, confeccion, almacen
+    estado: string; //pendiente, en proceso, pausa, terminado
+    total : number; 
     anticipo: number;
 }
