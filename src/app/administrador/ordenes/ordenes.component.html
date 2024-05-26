@@ -101,7 +101,7 @@
             <a
               class="btn btn-primary"
               data-bs-toggle="modal"
-              data-bs-target="#editarCliente"
+              data-bs-target="#modalPrenda"
             >
               <i class="fa-solid fa-plus"></i> Agregar
             </a>
@@ -154,7 +154,7 @@
             <a
               class="btn btn-primary"
               data-bs-toggle="modal"
-              data-bs-target="#editarDepto"
+              data-bs-target="#modalOrden"
             >
               <i class="fa-solid fa-plus"></i> Agregar
             </a>
@@ -182,7 +182,8 @@
                   <a
                     class="btn btn-primary m-2"
                     data-bs-toggle="modal"
-                    data-bs-target="#editarDepto"
+                    data-bs-target="#modalOrden"
+                    (click)="cargarOrden(orden.idOrden)"
                   >
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
@@ -192,134 +193,6 @@
                 </td>
               </tr>
               }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- row  -->
-  <div class="row my-6">
-    <div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-6 mb-xl-0">
-      <!-- card  -->
-      <div class="card h-100">
-        <!-- card body  -->
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <h4 class="mb-0">Progreso</h4>
-            </div>
-          </div>
-          <!-- chart  -->
-          <div class="mb-8">
-            <div id="perfomanceChart"></div>
-          </div>
-          <!-- icon with content  -->
-          <div class="d-flex align-items-center justify-content-around">
-            <div class="text-center">
-              <i class="icon-sm text-success" data-feather="check-circle"></i>
-              <h1 class="mt-3 mb-1 fw-bold">76%</h1>
-              <p>Completado</p>
-            </div>
-            <div class="text-center">
-              <i class="icon-sm text-warning" data-feather="trending-up"></i>
-              <h1 class="mt-3 mb-1 fw-bold">32%</h1>
-              <p>En-Progreso</p>
-            </div>
-            <div class="text-center">
-              <i class="icon-sm text-danger" data-feather="trending-down"></i>
-              <h1 class="mt-3 mb-1 fw-bold">13%</h1>
-              <p>Terminado</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- card  -->
-    <div class="col-xl-8 col-lg-12 col-md-12 col-12">
-      <div class="card h-100">
-        <!-- card header  -->
-        <div class="card-header bg-white py-4">
-          <h4 class="mb-0">Equipos</h4>
-        </div>
-        <!-- table  -->
-        <div class="table-responsive">
-          <table class="table text-nowrap">
-            <thead class="table-light">
-              <tr>
-                <th>Nombre</th>
-                <th>Área de trabajo</th>
-                <th>Última conexión</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="align-middle">
-                  <div class="d-flex align-items-center">
-                    <div>
-                      <img
-                        src=""
-                        alt=""
-                        class="avatar-md avatar rounded-circle"
-                      />
-                    </div>
-                    <div class="ms-3 lh-1">
-                      <h5 class="mb-1">Pedro López</h5>
-                      <!-- <p class="mb-0">anita@example.com</p> -->
-                    </div>
-                  </div>
-                </td>
-                <td class="align-middle">Front End Developer</td>
-                <td class="align-middle">3 May, 2023</td>
-                <td class="align-middle"></td>
-              </tr>
-              <tr>
-                <td class="align-middle border-bottom-0">
-                  <div class="d-flex align-items-center">
-                    <div>
-                      <img
-                        src="assets/images/avatar/avatar-6.jpg"
-                        alt=""
-                        class="avatar-md avatar rounded-circle"
-                      />
-                    </div>
-                    <div class="ms-3 lh-1">
-                      <h5 class="mb-1">George de la Selva</h5>
-                      <!-- <p class="mb-0">darshininair@example.com</p> -->
-                    </div>
-                  </div>
-                </td>
-                <td class="align-middle border-bottom-0">
-                  Front End Developer
-                </td>
-                <td class="align-middle border-bottom-0">3 May, 2023</td>
-                <td class="align-middle border-bottom-0">
-                  <div class="dropdown dropstart">
-                    <a
-                      class="text-muted text-primary-hover"
-                      href="#"
-                      role="button"
-                      id="dropdownTeamSix"
-                      data-bs-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <i class="icon-xxs" data-feather="more-vertical"></i>
-                    </a>
-
-                    <div
-                      class="dropdown-menu"
-                      aria-labelledby="dropdownTeamSix"
-                    >
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -404,10 +277,230 @@
             ></textarea>
           </div>
 
+          <div class="my-5">
+            <div class="mx-auto w-100">
+              <label class="text-center mb-3">Agregar Imagen</label>
+              <div class="input-group">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="image"
+                  (change)="onFileChange($event)"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
           <div class="modal-footer">
-            <button class="btn btn-danger">
+            @if(prenda.idPrenda != 0){
+            <button
+              class="btn btn-danger"
+              (click)="eliminarPrenda(prenda.idPrenda)"
+            >
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
+            }
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ordenes -->
+<div
+  class="modal fade"
+  id="modalOrden"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="limpiarDatosOrden()"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Orden</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #botonCerrarOrden
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #ordenForm="ngForm" (ngSubmit)="accionOrden(ordenForm)">
+          @if(orden.idOrden == 0){
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente</label>
+            <select
+              id="cliente"
+              name="cliente"
+              class="form-control"
+              [(ngModel)]="orden.cliente"
+              required
+            >
+              <option value="" disabled selected>Seleccione un cliente</option>
+              @for (cliente of clientes; track cliente.idUsuario){
+              <option [ngValue]="cliente">{{ cliente.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="empleado" class="form-label">Empleado</label>
+            <select
+              id="empleado"
+              name="empleado"
+              class="form-control"
+              [(ngModel)]="orden.empleado"
+              required
+            >
+              @for (empleado of empleados; track empleado.idUsuario){
+              <option [ngValue]="empleado">{{ empleado.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="prenda" class="form-label">Prenda</label>
+            <select
+              id="prenda"
+              name="prenda"
+              class="form-control"
+              [(ngModel)]="orden.prenda"
+              required
+            >
+              @for (prenda of prendas; track prenda.idPrenda){
+              <option [ngValue]="prenda">{{ prenda.titulo }}</option>
+              }
+            </select>
+          </div>
+          } @else {
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente</label>
+            <select
+              id="cliente"
+              name="cliente"
+              class="form-control"
+              [(ngModel)]="orden.cliente"
+              required
+            >
+              <option value="" disabled selected>Seleccione un cliente</option>
+              @for (cliente of clientes; track cliente.idUsuario){
+              <option [ngValue]="cliente">{{ cliente.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="empleado" class="form-label">Empleado</label>
+            <select
+              id="empleado"
+              name="empleado"
+              class="form-control"
+              [(ngModel)]="orden.empleado"
+              required
+            >
+              @for (empleado of empleados; track empleado.idUsuario){
+              <option [ngValue]="empleado">{{ empleado.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Prenda</label>
+            <input
+              type="text"
+              id="titulo"
+              name="prenda"
+              class="form-control"
+              [(ngModel)]="orden.prenda.titulo"
+              disabled
+            />
+          </div>
+          }
+
+          <div class="mb-3">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+            <input
+              type="text"
+              id="fechaInicio"
+              name="fechaInicio"
+              class="form-control"
+              [(ngModel)]="orden.fechaInicio"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="fechaEntrega" class="form-label"
+              >Fecha de Entrega</label
+            >
+            <input
+              type="text"
+              id="fechaEntrega"
+              name="fechaEntrega"
+              class="form-control"
+              [(ngModel)]="orden.fechaEntrega"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="etapa" class="form-label">Etapa</label>
+            <input
+              type="text"
+              id="etapa"
+              name="etapa"
+              class="form-control"
+              [(ngModel)]="orden.etapa"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <input
+              type="text"
+              id="estado"
+              name="estado"
+              class="form-control"
+              [(ngModel)]="orden.estado"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="total" class="form-label">Total</label>
+            <input
+              type="number"
+              id="total"
+              name="total"
+              class="form-control"
+              [(ngModel)]="orden.total"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="anticipo" class="form-label">Anticipo</label>
+            <input
+              type="number"
+              id="anticipo"
+              name="anticipo"
+              class="form-control"
+              [(ngModel)]="orden.anticipo"
+              required
+            />
+          </div>
+
+          <div class="modal-footer">
+            @if(orden.idOrden != 0){
+            <button
+              class="btn btn-danger"
+              (click)="eliminarOrden(orden.idOrden)"
+            >
+              <i class="fa-solid fa-trash"></i> Eliminar
+            </button>
+            }
+
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
