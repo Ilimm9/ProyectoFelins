@@ -195,7 +195,7 @@
 
           <div class="my-5">
             <div class="mx-auto w-100">
-              <label class="text-center mb-3">Agregar Imagen</label>
+              <label class="text-center mb-3">Agregar Logo</label>
               <div class="input-group">
                 <input
                   type="file"
@@ -208,6 +208,14 @@
                 />
               </div>
             </div>
+            @if(imagenUrl){
+              <div class="image-container mt-5 mb-2">
+                <img [src]="imagenUrl" alt="Imagen de la prenda" class="centered-and-resized">
+              </div>
+            } @else {
+              <p>Aun no se ha agregado un Logo</p>
+            }
+            
           </div>
 
           <div class="modal-footer">
@@ -305,7 +313,7 @@
             <input
               type="text"
               id="cliente"
-              name="apPaterno"
+              name="cliente"
               class="form-control"
               [(ngModel)]="orden.cliente.nombre"
               disabled

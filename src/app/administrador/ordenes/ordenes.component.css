@@ -9,3 +9,13 @@
     z-index: 100; /* Asegura que el encabezado se superponga al cuerpo de la tabla */
     background-color: white; /* Fondo blanco para el encabezado */
 }
+
+.image-container {
+    text-align: center; /* Para centrar la imagen horizontalmente */
+  }
+  
+  .centered-and-resized {
+    width: 100px; /* Ancho de la imagen */
+    height: 100px; /* Alto de la imagen */
+    object-fit: cover; /* Para mantener la relación de aspecto y cubrir completamente el contenedor */
+  }
