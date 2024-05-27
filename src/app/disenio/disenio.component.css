@@ -1,0 +1,23 @@
+.table-responsive {
+    max-height: 80%; /* Ajusta la altura según tus necesidades */
+    overflow-y: auto;
+}
+
+.table-responsive thead {
+    position: sticky;
+    top: 0;
+    z-index: 100; /* Asegura que el encabezado se superponga al cuerpo de la tabla */
+    background-color: white; /* Fondo blanco para el encabezado */
+}
+
+.btn-icon {
+    width: 40px; /* Ajusta el tamaño según sea necesario */
+    height: 40px; /* Ajusta el tamaño según sea necesario */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-size {
+    font-size: 24px; /* Ajusta el tamaño del icono según sea necesario */
+}
