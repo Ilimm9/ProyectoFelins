@@ -186,6 +186,58 @@
 </div>
 
 
+  <div class="row mt-6">
+    <div class="col-md-12 col-12">
+      <!-- card  -->
+      <section id="Empleados" class="container">
+        <div class="card">
+          <div class="card-header bg-white py-4 d-flex justify-content-between">
+            <div class="mt-2">
+              <h4>
+                <i class="fa-solid fa-users mx-2"></i> Lista de Ordenes 
+              </h4>
+            </div>
+          </div>
+          <div
+          class="table-responsive"
+          style="max-height: 780px; overflow-y: auto"
+        >
+          <table class="table table-nowrap">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (orden of ordenes; track prenda.idPrenda) {
+              <tr>
+                <td>{{ orden.idOrden }}</td>
+                <td>{{ orden.prenda.titulo }}</td>
+                <td>{{ orden.prenda.cantidad }}</td>
+                <td>{{ orden.estado }}</td>
+                <td>
+                  <a class="btn btn-primary mx-2 my-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalOrden"
+                  (click)="cargarOrden(orden.idOrden)">
+                    <i class="icon-xs me-2 fa-regular fa-eye"></i> Ver Detalles
+                  </a>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </section>
+    </div>
+
+
 <!-- Modal para materiales -->
 <div
   class="modal fade"
@@ -262,3 +314,91 @@
     </div>
   </div>
 </div>
+<!-- Modal para ordenes -->
+<div
+  class="modal fade"
+  id="modalOrden"
+  tabindex="-1" 
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #botonCerrarOrden
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #ordenForm="ngForm" (ngSubmit)="accionOrden(ordenForm)">
+          
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <textarea
+              id="nombre"
+              name="descripcion"
+              class="form-control"
+              [(ngModel)]="orden.cliente.nombre"
+              required
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Prenda</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              class="form-control"
+              [(ngModel)]="orden.prenda.titulo"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Descripción</label>
+            <input
+              type="text"
+              id="titulo"
+              name="descripcion"
+              class="form-control"
+              [(ngModel)]="orden.prenda.descripcion"
+              disabled
+            />
+          </div>
+
+          <div class="my-5">
+            
+                    <button
+                    class="btn btn-success mt-3"
+                    (click)="modificarStatus(orden.idOrden)"
+                  >
+                    Entregar
+                  </button>
+                  
+              </div>
+      
+<!--               
+            @if(fileLoaded){
+                <button
+                class="btn btn-success mt-3"
+                (click)="modificarStatus(orden.idOrden)"
+              >
+                Entregar
+              </button>
+              }
+            </div>
+          </div> -->
+          
+          
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 
+

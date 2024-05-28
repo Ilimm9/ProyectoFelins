@@ -40,6 +40,7 @@ export class OrdenesComponent {
   imagenUrl: string; // Variable para almacenar la URL de la imagen
   // Define una variable para almacenar el archivo globalmente
   archivoSeleccionado: File | null = null;
+  previewUrl: string | null = null;
 
   constructor(private prendaService: PrendaService, 
     private ordenService: OrdenService,
@@ -169,18 +170,26 @@ export class OrdenesComponent {
     if (input.files && input.files.length > 0) {
       // Almacena el archivo seleccionado en la variable archivoSeleccionado
       this.archivoSeleccionado = input.files[0];
+
+      // Generar una URL de vista previa
       const reader = new FileReader();
-
       reader.onload = () => {
-        // No necesitas asignar la imagen a la propiedad logo de la prenda
-        // this.prenda.logo = reader.result as ArrayBuffer;
-        // Simplemente llama al método para subir la imagen
-        //this.subirImagenPrenda(this.prenda.idPrenda);
+        this.previewUrl = reader.result as string;
       };
-
-      reader.readAsArrayBuffer(this.archivoSeleccionado);
+      reader.readAsDataURL(this.archivoSeleccionado);
     }
-  }
+
+
+      
+      // reader.onload = () => {
+      //   // No necesitas asignar la imagen a la propiedad logo de la prenda
+      //   // this.prenda.logo = reader.result as ArrayBuffer;
+      //   // Simplemente llama al método para subir la imagen
+      //   //this.subirImagenPrenda(this.prenda.idPrenda);
+      // };
+
+      // reader.readAsArrayBuffer(this.archivoSeleccionado);
+ }
 
   subirImagenPrenda(idPrenda: number): void {
     // Asegúrate de que la prenda tenga un ID válido
