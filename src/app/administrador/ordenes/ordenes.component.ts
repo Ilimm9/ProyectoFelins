@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgModule, ViewChild } from '@angular/core';
 import { Prenda } from '../../models/prenda';
 import { Orden } from '../../models/orden';
 import { PrendaService } from '../../service/prenda.service';
@@ -12,10 +12,12 @@ import { ClientesService } from '../../service/clientes.service';
 import { DatePipe } from '@angular/common';
 import { ImgPrendaService } from '../../service/img-prenda.service';
 
+
 @Component({
   selector: 'app-ordenes',
   standalone: true,
-  imports: [FormsModule, DatePipe ],
+  imports: [FormsModule, DatePipe
+  ],
   templateUrl: './ordenes.component.html',
   styleUrl: './ordenes.component.css'
 })
@@ -41,6 +43,8 @@ export class OrdenesComponent {
   // Define una variable para almacenar el archivo globalmente
   archivoSeleccionado: File | null = null;
   previewUrl: string | null = null;
+  
+  today: string;
 
   constructor(private prendaService: PrendaService, 
     private ordenService: OrdenService,
@@ -50,6 +54,11 @@ export class OrdenesComponent {
     private imgPrendaService : ImgPrendaService
   ){
 
+    const todayDate = new Date();
+    const day = String(todayDate.getDate()).padStart(2, '0');
+    const month = String(todayDate.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0 a 11
+    const year = todayDate.getFullYear();
+    this.today = `${year}-${month}-${day}`;
   }
 
   ngOnInit(){
@@ -61,6 +70,11 @@ export class OrdenesComponent {
 
     this.obtenerClientes();
     this.obtenerEmpleados();
+    const hoy = new Date();
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    this.fechaMinima = `${hoy.getFullYear()}-${mes}-${dia}`;
+  
   }
 
   obtenerEmpleados() {
@@ -71,6 +85,7 @@ export class OrdenesComponent {
     );
     console.log(this.empleados);
   }
+
 
   obtenerClientes() {
     this.clienteService.obtenerClientes().subscribe(
@@ -228,8 +243,6 @@ export class OrdenesComponent {
     console.log(this.imagenUrl)
   }
 
-
-
   //metodos para manipulacion de las ordenes
 
   eliminarOrden(id: number){
@@ -310,8 +323,47 @@ export class OrdenesComponent {
     return false;
   }
 
-  
-  
+  // campo = { titulo: '' }; 
+
+  // validarLabelNoVacio(textoLabel: string): boolean {
+  //   return textoLabel.trim() !== ''; //return true si es vacio
+  // }
+
+  actualizarFecha(event: any) {
+    const fechaSeleccionada = new Date(event.target.value);
+    const año = fechaSeleccionada.getFullYear();
+    const mes = (fechaSeleccionada.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
+    const dia = fechaSeleccionada.getDate().toString().padStart(2, '0');
+    this.fecha.fechaEntrega = `${año}, ${mes}, ${dia}`;
+  }
+
+  campo = { titulo: '' }; // Objeto prenda con propiedad titulo inicializada como cadena vacía
+  campoVacio: boolean = false; // Propiedad para indicar si el campo está vacío
+
+  validarCampoNoVacio(valor: string): void {
+    this.campoVacio = valor.trim() === ''; // Actualizar estado del campo vacío en tiempo real
+  }
+
+  validarEtapa(textoLabel: string): boolean {
+    return textoLabel.trim() !== 'diseño' && textoLabel.trim() !== 'corte' && textoLabel.trim() !== 'sublimacion';
+}
+validarCantidades(cantidad: number): boolean {
+  return cantidad > 12;
+}
+validarPrecio(cantidad: number): boolean {
+  return cantidad > 0;
+}
+
+  validarFechas(){
+
+  }
+  validarCampos(){
+
+  }
+
+  fecha = { fechaEntrega: '' };
+  fechaMinima: string;
+
 
 
 }
