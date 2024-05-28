@@ -7,6 +7,8 @@ import { ClientesService } from '../../service/clientes.service';
 import { EmpleadosService } from '../../service/empleados.service';
 import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
+import { ImgUsuarioService } from '../../service/img-usuario.service';
+import { Observable, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -33,9 +35,19 @@ export class UsuariosComponent {
   @ViewChild("deptoForm") deptoForm: NgForm
   @ViewChild('botonCerrarDepto') botonCerrarDepto: ElementRef;
 
-  constructor(private departamentoService: DepartamentosService, private clienteService: ClientesService, private empleadoService: EmpleadosService, private router: Router) {
+  constructor(
+    private departamentoService: DepartamentosService,
+    private clienteService: ClientesService,
+    private empleadoService: EmpleadosService,
+    private imagenEmpleadoService: ImgUsuarioService,
+    private router: Router
+  ) {
 
   }
+
+  imagenUrl: string; // Variable para almacenar la URL de la imagen
+  // Define una variable para almacenar el archivo globalmente
+  archivoSeleccionado: File | null = null;
 
   ngOnInit() {
     this.obtenerDepartamentos();
@@ -49,17 +61,18 @@ export class UsuariosComponent {
 
   //PARA EL CRUD DE EMPLEADOS
 
-  inicilizarDatosEmpleado(){
+  inicilizarDatosEmpleado() {
     //agregamos estos datos temporalmente para evitar conflictos
     this.empleado.idUsuario = 0;
     this.empleado.departamentos.push(new Departamento());
     this.empleado.departamentos[0].idDepto = 0;
   }
 
-  limpiarDatosEmpleado(){
+  limpiarDatosEmpleado() {
     this.empleado = new Empleado();
     this.inicilizarDatosEmpleado();
     this.empleadoForm.resetForm();
+    this.imagenUrl = "";
   }
 
   eliminarEmpleado(id: number) {
@@ -83,19 +96,28 @@ export class UsuariosComponent {
     //cerramos el modal
     this.empleadoForm.resetForm();
     this.cerrarModalEmpleado();
-
   }
 
-  agregarEmpleado(){
+
+  agregarEmpleado() {
     this.empleadoService.agregarEmpleado(this.empleado).subscribe(
       {
         next: (datos) => {
           //son los datos regresados pero por el momento no se ocupan
+          this.obtenerEmpleados();
           this.router.navigate(['/administracion/usuarios']);
+
         },
         error: (error: any) => { console.log(error) }
       }
     );
+
+    //despues de agregar el usuario agregamos la imagen
+    if(this.archivoSeleccionado != null){
+      console.log('id a meter img: ' + this.empleados[this.empleados.length-1].idUsuario)
+      this.subirImagenEmpleado(this.empleados[this.empleados.length-1].idUsuario);
+      console.log('imagen agregada');
+    }
     console.log('empleado agregado')
   }
 
@@ -103,7 +125,14 @@ export class UsuariosComponent {
     console.log('entramos a guardar los cambios')
     this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
       {
-        next: (datos) => console.log('realizado'),
+        next: (datos) => {
+          console.log('datos cambiados');
+          console.log(this.archivoSeleccionado)
+          if(this.archivoSeleccionado != null){
+            this.subirImagenEmpleado(this.empleado.idUsuario);
+            console.log('imagen cambiada');
+          }
+        },
         error: (errores) => console.log(errores)
       }
     );
@@ -115,6 +144,7 @@ export class UsuariosComponent {
 
   //Al dar clic en editar se carga la variable con los datos del empleado correspondiente
   cargarEmpleado(id: number) {
+    this.empleado.idUsuario = id;
     this.empleadoService.obtenerEmpleadoPorId(id).subscribe(
       {
         next: (datos) => this.empleado = datos,
@@ -122,6 +152,7 @@ export class UsuariosComponent {
       }
     );
     console.log(id)
+    this.obtenerImagenEmpleado(this.empleado.idUsuario);
     console.log(this.empleado.nombre)
   }
 
@@ -162,9 +193,80 @@ export class UsuariosComponent {
     this.botonCerrarEmpleado.nativeElement.click();
   }
 
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      // Almacena el archivo seleccionado en la variable archivoSeleccionado
+      this.archivoSeleccionado = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        // No necesitas asignar la imagen a la propiedad logo de la prenda
+        // this.prenda.logo = reader.result as ArrayBuffer;
+        // Simplemente llama al método para subir la imagen
+        //this.subirImagenEmpleado(this.prenda.idPrenda);
+      };
+
+      reader.readAsArrayBuffer(this.archivoSeleccionado);
+    }
+  }
+
+  subirImagenEmpleado(idUsuario: number): void {
+    // Asegúrate de que la prenda tenga un ID válido
+    if (!idUsuario) {
+      console.error('La prenda no tiene un ID válido.');
+      return;
+    }
+
+    // Llama al servicio para agregar la imagen a la prenda en la base de datos
+    if (this.archivoSeleccionado == null) {
+      console.log('no se selecciono un archivo')
+      return;
+    }
+    this.imagenEmpleadoService.agregarImagenEmpleado(idUsuario, this.archivoSeleccionado).subscribe(
+      response => {
+        console.log('Imagen agregada correctamente a la prenda.');
+        // Aquí puedes hacer lo que necesites después de subir la imagen
+      },
+      error => console.error('Error al subir la imagen a la prenda: ', error)
+    );
+  }
+
+  subirImagenEmpleadoAgregar(idUsuario: number): Observable<any> {
+    // Asegúrate de que la prenda tenga un ID válido
+    if (!idUsuario) {
+        console.error('La prenda no tiene un ID válido.');
+        return of(null); // Devolver un observable nulo
+    }
+
+    // Llama al servicio para agregar la imagen a la prenda en la base de datos
+    if (this.archivoSeleccionado == null) {
+        console.log('no se selecciono un archivo');
+        return of(null); // Devolver un observable nulo
+    }
+    return this.imagenEmpleadoService.agregarImagenEmpleado(idUsuario, this.archivoSeleccionado);
+}
+
+
+  obtenerImagenEmpleado(idUsuario: number): void {
+    console.log('vamos a intentar ver la imagen')
+    this.imagenEmpleadoService.obtenerImagenEmpleado(idUsuario).subscribe(
+      imagen => {
+        // Convierte la imagen en una URL para mostrarla en el HTML
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.imagenUrl = reader.result as string;
+        };
+        reader.readAsDataURL(imagen);
+      },
+      error => console.error('Error al obtener imagen de la prenda: ', error)
+    );
+    console.log(this.imagenUrl)
+  }
+
   //PARA EL CRUD DE CLIENTES
 
-  eliminarCliente(id: number){
+  eliminarCliente(id: number) {
     this.clienteService.eliminarCliente(id).subscribe({
       next: (datos) => this.obtenerClientes(),
       error: (errores) => console.log(errores)
@@ -180,7 +282,7 @@ export class UsuariosComponent {
     console.log(this.clientes)
   }
 
-  cargarCliente(id: number){
+  cargarCliente(id: number) {
     this.clienteService.obtenerClientePorId(id).subscribe(
       {
         next: (datos) => this.cliente = datos,
@@ -206,7 +308,7 @@ export class UsuariosComponent {
 
   }
 
-  agregarCliente(){
+  agregarCliente() {
     this.clienteService.agregarCliente(this.cliente).subscribe(
       {
         next: (datos) => {
@@ -233,15 +335,16 @@ export class UsuariosComponent {
     })
   }
 
-  inicilizarDatosCliente(){
+  inicilizarDatosCliente() {
     //agregamos estos datos temporalmente para evitar conflictos
     this.cliente.idUsuario = 0;
   }
 
-  limpiarDatosCliente(){
+  limpiarDatosCliente() {
     this.cliente = new Cliente();
     this.inicilizarDatosCliente();
     this.clienteForm.resetForm();
+    
   }
 
 
@@ -256,14 +359,14 @@ export class UsuariosComponent {
     console.log(this.departamentos)
   }
 
-  eliminarDepto(id: number){
+  eliminarDepto(id: number) {
     this.departamentoService.eliminarDepartamento(id).subscribe({
       next: (datos) => this.obtenerDepartamentos(),
       error: (errores) => console.log(errores)
     });
   }
 
-  cargarDepto(id: number){
+  cargarDepto(id: number) {
     this.departamentoService.obtenerDepartamentoPorId(id).subscribe(
       {
         next: (datos) => this.depto = datos,
@@ -289,7 +392,7 @@ export class UsuariosComponent {
 
   }
 
-  agregarDepto(){
+  agregarDepto() {
     this.departamentoService.agregarDepartamento(this.depto).subscribe(
       {
         next: (datos) => {
@@ -316,12 +419,12 @@ export class UsuariosComponent {
     })
   }
 
-  inicilizarDatosDepto(){
+  inicilizarDatosDepto() {
     //agregamos estos datos temporalmente para evitar conflictos
     this.depto.idDepto = 0;
   }
 
-  limpiarDatosDepto(){
+  limpiarDatosDepto() {
     this.depto = new Departamento();
     this.inicilizarDatosDepto();
     this.deptoForm.resetForm();

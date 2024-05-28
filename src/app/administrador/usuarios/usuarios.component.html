@@ -144,12 +144,6 @@
                     >
                       <i class="fas fa-angle-double-right"></i> Editar
                     </a>
-                    <button
-                      (click)="eliminarEmpleado(empleado.idUsuario)"
-                      class="btn btn-danger"
-                    >
-                      <i class="fa-solid fa-trash"></i> Eliminar
-                    </button>
                   </td>
                 </tr>
                 }
@@ -270,11 +264,11 @@
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
                   <button
-                      (click)="eliminarDepto(depto.idDepto)"
-                      class="btn btn-danger"
-                    >
-                      <i class="fa-solid fa-trash"></i> Eliminar
-                    </button>
+                    (click)="eliminarDepto(depto.idDepto)"
+                    class="btn btn-danger"
+                  >
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                  </button>
                 </td>
               </tr>
               }
@@ -426,15 +420,46 @@
             />
             <label class="form-check-label" for="activo">Activo</label>
           </div>
+          @if(empleado.idUsuario != 0){
+
+          <div class="my-5">
+            <div class="mx-auto w-100">
+              <label class="text-center mb-3">Agregar Imagen Usuario</label>
+              <div class="input-group">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="image"
+                  (change)="onFileChange($event)"
+                  aria-describedby="inputGroupFileAddon04"
+                  aria-label="Upload"
+                  required
+                />
+              </div>
+            </div>
+            @if(imagenUrl){
+            <div class="image-container mt-5 mb-2">
+              <img
+                [src]="imagenUrl"
+                alt="Imagen de la prenda"
+                class="centered-and-resized"
+              />
+            </div>
+            } @else {
+            <p>Aun no se ha agregado un Logo</p>
+            }
+          </div>
+          }
+
           <div class="modal-footer">
+            @if(empleado.idUsuario != 0){
             <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              (click)="limpiarDatosEmpleado()"
+              (click)="eliminarEmpleado(empleado.idUsuario)"
+              class="btn btn-danger"
             >
-              Cancelar
+              <i class="fa-solid fa-trash"></i> Eliminar
             </button>
+            }
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
