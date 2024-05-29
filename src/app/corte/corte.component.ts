@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   selector: 'app-corte',
   standalone: true,
   imports: [FormsModule],
-  imports: [FormsModule],
   templateUrl: './corte.component.html',
   styleUrl: './corte.component.css',
 })

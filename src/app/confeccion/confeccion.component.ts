@@ -7,20 +7,10 @@ import { Empleado } from '../models/empleado';
 import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Prenda } from '../models/prenda';
-import { Orden } from '../models/orden';
-import { Cliente } from '../models/cliente';
-import { Empleado } from '../models/empleado';
-import { PrendaService } from '../service/prenda.service';
-import { OrdenService } from '../service/orden.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-confeccion',
   standalone: true,
-  imports: [FormsModule],
   imports: [FormsModule],
   templateUrl: './confeccion.component.html',
   styleUrl: './confeccion.component.css'

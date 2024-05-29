@@ -415,9 +415,9 @@
               class="form-control"
               [(ngModel)]="orden.etapa"
               required
-            />@if(!validarEtapa(orden.etapa) && orden.etapa){
+            />@if(validarEtapa(orden.etapa) && orden.etapa){
               <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                Campo obligatorio
+                Ingrese una etapa valida (diseño, corte,sublimacion o confeccion)
             </div>
             }
           </div>
@@ -431,9 +431,9 @@
               [(ngModel)]="orden.estado"
               required
             />
-             @if(!validarEstado(orden.estado) && orden.estado){
+             @if(validarEstado(orden.estado) && orden.estado){
               <div class="text-danger"> 
-                Campo obligatorio
+                Ingrese un estado valido (En proceso, Pendiente)
             </div>
             }
           </div>
