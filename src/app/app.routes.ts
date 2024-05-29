@@ -8,6 +8,7 @@ import { AdministradorComponent } from './administrador/administrador.component'
 import { SublimacionComponent } from './sublimacion/sublimacion.component';
 import { OrdenesComponent } from './administrador/ordenes/ordenes.component';
 import { UsuariosComponent } from './administrador/usuarios/usuarios.component';
+import { VentanasComponent } from './ventanas/ventanas.component';
 // import { PruebaComponent } from './prueba/prueba.component';
 
 export const routes: Routes = [
@@ -18,11 +19,14 @@ export const routes: Routes = [
         { path: 'ordenes', component: OrdenesComponent},
         {path: 'usuarios', component: UsuariosComponent}
     ]},
-    { path: 'diseño', component: DisenioComponent},
-    { path: 'corte',component: CorteComponent},
-    { path: 'sublimacion',component: SublimacionComponent},
-    { path: 'confeccion', component: ConfeccionComponent},
-    { path: 'almacen', component: AlmacenComponent},
+    {path: 'fase', component: VentanasComponent, children: [
+        { path: 'diseño', component: DisenioComponent},
+        { path: 'corte',component: CorteComponent},
+        { path: 'sublimacion',component: SublimacionComponent},
+        { path: 'confeccion', component: ConfeccionComponent},
+        { path: 'almacen', component: AlmacenComponent},
+    ]},
+    
     
     // { path: 'prueba', component: PruebaComponent}
 ];

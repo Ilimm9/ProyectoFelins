@@ -20,21 +20,21 @@ export class LoginComponent {
   usuario: string
   password: string
   empleado: Empleado = new Empleado();
-  
+
 
   constructor(
-    private empleadoService: EmpleadosService, 
-    private router: Router, 
+    private empleadoService: EmpleadosService,
+    private router: Router,
     private alertMessage: AlertMessagesService,
     private empleadoLoggedService: EmpleadoLoggedService
   ) { }
 
   ngOnInit() {
-    if(this.empleadoLoggedService.getIsLogin()){
+    if (this.empleadoLoggedService.getIsLogin()) {
       this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
     }
     this.obtenerEmpleados();
-    
+
   }
 
   private obtenerEmpleados() {
@@ -59,17 +59,21 @@ export class LoginComponent {
 
         this.empleadoLoggedService.setEmpleado(empleado);
         this.empleadoLoggedService.setIsLogin(true);
-        
-        this.router.navigate(['/' + (empleado.departamentos[0].nombre).toLowerCase()])
+        if (empleado.departamentos[0].nombre.toLowerCase() !== 'administracion') {
+          this.router.navigate(['/fase/' + (empleado.departamentos[0].nombre).toLowerCase()])
+        } else {
+          this.router.navigate(['/' + (empleado.departamentos[0].nombre).toLowerCase()])
+        }
+
         //este actualiza la variable bool para login
         encontrado = true
         return
       }
     })
 
-    if(!encontrado){
+    if (!encontrado) {
       console.log('no encontrado')
-      this.alertMessage.show('Verifica tu usuario y contraseña', {cssClass:'alert alert-warning', timeOut: 3000})
+      this.alertMessage.show('Verifica tu usuario y contraseña', { cssClass: 'alert alert-warning', timeOut: 3000 })
       this.usuario = ''
       this.password = ''
     }

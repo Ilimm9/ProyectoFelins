@@ -12,6 +12,18 @@
   vertical-align: baseline !important;
 }
 
+.btn-icon {
+  width: 40px; /* Ajusta el tamaño según sea necesario */
+  height: 40px; /* Ajusta el tamaño según sea necesario */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-size {
+  font-size: 24px; /* Ajusta el tamaño del icono según sea necesario */
+}
+
 .align-top {
   vertical-align: top !important;
 }
