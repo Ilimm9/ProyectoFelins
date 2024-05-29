@@ -1,21 +1,21 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Prenda } from '../models/prenda';
-import { Orden } from '../models/orden';
-import { Cliente } from '../models/cliente';
-import { Empleado } from '../models/empleado';
 import { FormsModule, NgForm } from '@angular/forms';
-import { PrendaService } from '../service/prenda.service';
-import { OrdenService } from '../service/orden.service';
+import { PrendaService } from '../../service/prenda.service';
+import { OrdenService } from '../../service/orden.service';
 import { Router } from '@angular/router';
+import { Cliente } from '../../models/cliente';
+import { Prenda } from '../../models/prenda';
+import { Orden } from '../../models/orden';
+import { Empleado } from '../../models/empleado';
 
 @Component({
-  selector: 'app-sublimacion',
+  selector: 'app-historial',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './sublimacion.component.html',
-  styleUrl: './sublimacion.component.css'
+  templateUrl: './historial.component.html',
+  styleUrl: './historial.component.css'
 })
-export class SublimacionComponent {
+export class HistorialComponent {
   prendas: Prenda[]
   ordenes: Orden[]
 
@@ -102,9 +102,11 @@ export class SublimacionComponent {
   obtenerOrdenes(){
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.etapa === 'Sublimacion');
+        this.ordenes = datos.filter((orden)=>orden.etapa === 'Terminado');
       console.log(this.ordenes)
       })
     );
   }
+
+
 }

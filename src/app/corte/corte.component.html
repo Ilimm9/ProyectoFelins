@@ -1,6 +1,187 @@
-<p>probando corte</p>
-<p>probando corte</p>
-<p>probando corte</p>
-<p>probando corte</p>
-<p>probando corte</p>
-<p>probando corte</p>
+<!-- Container fluid -->
+<div class="bg-primary pt-20 pb-15"></div>
+<div class="container-fluid mt-n22 px-6 mb-22">
+  <div class="row mt-6">
+    <div class="col-md-12 col-12">
+      <!-- card  -->
+      <section id="Empleados" class="container">
+        <div class="card">
+          <div class="card-header bg-white py-4 d-flex justify-content-between">
+            <div class="mt-2">
+              <h4><i class="fa-solid fa-users mx-2"></i> Ordenes Terminadas</h4>
+            </div>
+          </div>
+          <div
+            class="table-responsive"
+            style="max-height: 780px; overflow-y: auto"
+          >
+            <table class="table table-nowrap">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Etapa</th>
+                  <th>Estado</th>
+                  <th>Opciones</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (orden of ordenes; track prenda.idPrenda) {
+                <tr>
+                  <td>{{ orden.idOrden }}</td>
+                  <td>{{ orden.prenda.titulo }}</td>
+                  <td>{{ orden.prenda.cantidad }}</td>
+                  <td>{{ orden.etapa }}</td>
+                  <td>{{ orden.estado }}</td>
+                  <td>
+                    <a
+                      class="btn btn-primary mx-2 my-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalOrden"
+                      (click)="cargarOrden(orden.idOrden)"
+                    >
+                      <i class="icon-xs me-2 fa-regular fa-eye"></i> Ver
+                      Detalles
+                    </a>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ordenes -->
+<div
+  class="modal fade"
+  id="modalOrden"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #botonCerrarOrden
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #ordenForm="ngForm" (ngSubmit)="accionOrden(ordenForm)">
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente</label>
+            <input
+              type="text"
+              id="cliente"
+              name="cliente"
+              class="form-control"
+              [(ngModel)]="orden.cliente.nombre"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="empleado" class="form-label">Empleado</label>
+            <input
+              type="text"
+              id="empleado"
+              name="nombre"
+              class="form-control"
+              [(ngModel)]="orden.empleado.nombre"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Prenda</label>
+            <input
+              type="text"
+              id="titulo"
+              name="prenda"
+              class="form-control"
+              [(ngModel)]="orden.prenda.titulo"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Descripción</label>
+            <input
+              type="text"
+              id="titulo"
+              name="descripcion"
+              class="form-control"
+              [(ngModel)]="orden.prenda.descripcion"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+            <input
+              type="text"
+              id="fechaInicio"
+              name="fechaInicio"
+              class="form-control"
+              [(ngModel)]="orden.fechaInicio"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="fechaEntrega" class="form-label"
+              >Fecha de Entrega</label
+            >
+            <input
+              type="text"
+              id="fechaEntrega"
+              name="fechaEntrega"
+              class="form-control"
+              [(ngModel)]="orden.fechaEntrega"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="etapa" class="form-label">Etapa</label>
+            <input
+              type="text"
+              id="etapa"
+              name="etapa"
+              class="form-control"
+              [(ngModel)]="orden.etapa"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <input
+              type="text"
+              id="estado"
+              name="estado"
+              class="form-control"
+              [(ngModel)]="orden.estado"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="total" class="form-label">Total</label>
+            <input
+              type="number"
+              id="total"
+              name="total"
+              class="form-control"
+              [(ngModel)]="orden.total"
+              disabled
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
