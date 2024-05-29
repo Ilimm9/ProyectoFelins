@@ -20,7 +20,7 @@ export class AdministradorComponent {
   clientes: Cliente[]
   empleados: Empleado[]
 
-  constructor(private departamentoService: DepartamentosService, private clienteService: ClientesService, private empleadoService: EmpleadosService, private router: Router){
+  constructor(){
     
   }
 
