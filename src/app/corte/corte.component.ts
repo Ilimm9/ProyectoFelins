@@ -108,5 +108,14 @@ export class CorteComponent   {
       })
     );
   }
+
+  modificarEtapa(id:number){
+    this.orden.etapa = 'corte' 
+    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+      next: (datos) => console.log('sublimacion'),
+      error: (errores) => console.log(errores)
+    });
+    window.location.reload();
+  }
 }
 

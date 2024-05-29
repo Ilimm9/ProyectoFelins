@@ -8,7 +8,7 @@
         <div class="card">
           <div class="card-header bg-white py-4 d-flex justify-content-between">
             <div class="mt-2">
-              <h4><i class="fa-solid fa-users mx-2"></i> Ordenes Terminadas</h4>
+              <h4><i class="fa-solid fa-users mx-2"></i> Ordenes Pendientes</h4>
             </div>
           </div>
           <div
@@ -45,6 +45,14 @@
                       <i class="icon-xs me-2 fa-regular fa-eye"></i> Ver
                       Detalles
                     </a>
+                  </td>
+                  <td>
+                    <button
+                class="btn btn-success mt-3"
+                (click)="modificarEtapa(orden.idOrden)"
+              >
+                Orden terminada
+              </button>
                   </td>
                 </tr>
                 }

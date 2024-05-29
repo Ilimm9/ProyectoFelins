@@ -94,15 +94,6 @@ export class DisenioComponent {
 
   }
 
-  modificarStatus(id: number, ){
-    this.orden.etapa='sublimacion'
-    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
-      error: (errores) => console.log(errores)
-    });
-    window.location.reload();
-  }
-
   cargarOrden(id: number){
     this.ordenService.obtenerOrdenPorId(id).subscribe(
       {
@@ -190,5 +181,13 @@ export class DisenioComponent {
     }
   }
 
+  modificarStatus(id: number, ){
+    this.orden.estado='pendiente'
+    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+      next: (datos) => console.log('terminado'),
+      error: (errores) => console.log(errores)
+    });
+    window.location.reload();
+  }
 
 }

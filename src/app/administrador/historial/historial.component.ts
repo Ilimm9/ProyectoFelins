@@ -102,7 +102,7 @@ export class HistorialComponent {
   obtenerOrdenes(){
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.etapa === 'Terminado');
+        this.ordenes = datos.filter((orden)=>orden.estado === 'Terminado');
       console.log(this.ordenes)
       })
     );

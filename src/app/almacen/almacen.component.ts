@@ -187,6 +187,8 @@ cargarOrden(id: number){
   console.log(id)
 }
 
+
+
 obtenerOrdenes(){
   this.ordenService.obtenerOrdenes().subscribe(
     (datos => {
