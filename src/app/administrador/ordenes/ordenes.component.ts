@@ -347,6 +347,9 @@ export class OrdenesComponent {
   validarEtapa(textoLabel: string): boolean {
     return textoLabel.trim() !== 'diseño' && textoLabel.trim() !== 'corte' && textoLabel.trim() !== 'sublimacion';
 }
+validarEstado(textoLabel: string): boolean {
+  return textoLabel.trim() !== 'En progreso' && textoLabel.trim() !== 'Pendiente' && textoLabel.trim() !== 'Terminado';
+}
 validarCantidades(cantidad: number): boolean {
   return cantidad > 12;
 }

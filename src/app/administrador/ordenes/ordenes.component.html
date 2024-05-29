@@ -195,8 +195,7 @@
             }
           </div>
           <div class="mb-3">
-            @if(prenda.titulo && prenda.descripcion && prenda.cantidad && prenda.precio){
-            <label for="precio" class="form-label">Precio</label>}
+            <label for="precio" class="form-label">Precio</label>
             <input
               type="number"
               id="precio"
@@ -416,7 +415,11 @@
               class="form-control"
               [(ngModel)]="orden.etapa"
               required
-            />
+            />@if(!validarEtapa(orden.etapa) && orden.etapa){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                Campo obligatorio
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="estado" class="form-label">Estado</label>
@@ -428,6 +431,11 @@
               [(ngModel)]="orden.estado"
               required
             />
+             @if(!validarEstado(orden.estado) && orden.estado){
+              <div class="text-danger"> 
+                Campo obligatorio
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="total" class="form-label">Total</label>
@@ -439,7 +447,14 @@
               [(ngModel)]="orden.total"
               required
             />
-            <!-- <div id="total" class="form-control" >
+            @if(!validarPrecio(orden.total) && orden.total){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                Campo obligatorio
+            </div>
+            }
+            <!--
+              obtenerlo de la base de datos 
+              <div id="total" class="form-control" >
               {{ orden.total }}
             </div> -->
           </div>
