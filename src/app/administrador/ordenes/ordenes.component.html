@@ -129,8 +129,13 @@
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Prenda</h1>
-        <button
+        @if(prenda.idPrenda == 0){
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Prenda</h1>
+        }@else{
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Prenda</h1>
+
+        }
+          <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
@@ -148,8 +153,14 @@
               name="titulo"
               class="form-control"
               [(ngModel)]="prenda.titulo"
+              (input)="validarCampoNoVacio(prenda.titulo)" 
               required
             />
+            @if(!campoVacio && !prenda.titulo){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                El título es requerido.
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
@@ -158,8 +169,14 @@
               name="descripcion"
               class="form-control"
               [(ngModel)]="prenda.descripcion"
+              (input)="validarCampoNoVacio(prenda.descripcion)" 
               required
             ></textarea>
+            @if(!campoVacio && !prenda.descripcion){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                La descripcion es requerido.
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="cantidad" class="form-label">Cantidad</label>
@@ -171,6 +188,11 @@
               [(ngModel)]="prenda.cantidad"
               required
             />
+            @if(!validarCantidades(prenda.cantidad) && prenda.cantidad){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                La cantidad debe ser mayor a 12
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="precio" class="form-label">Precio</label>
@@ -182,6 +204,12 @@
               [(ngModel)]="prenda.precio"
               required
             />
+
+            @if(!validarPrecio(prenda.precio) && prenda.cantidad){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                Campo obligatorio
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="observaciones" class="form-label">Observaciones</label>
@@ -193,6 +221,8 @@
             ></textarea>
           </div>
 
+          @if(prenda.idPrenda != 0){
+            
           <div class="my-5">
             <div class="mx-auto w-100">
               <label class="text-center mb-3">Agregar Logo</label>
@@ -218,6 +248,7 @@
             
           </div>
 
+            }
           <div class="modal-footer">
             @if(prenda.idPrenda != 0){
             <button
@@ -227,8 +258,8 @@
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
             }
-
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            @if(prenda.titulo && prenda.descripcion && prenda.cantidad && prenda.precio){
+            <button type="submit" class="btn btn-primary">Guardar</button>}
           </div>
         </form>
       </div>
@@ -248,8 +279,12 @@
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
+        @if(orden.idOrden == 0){
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Orden</h1>
+      }@else{
         <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Orden</h1>
-        <button
+      }
+      <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
@@ -346,11 +381,13 @@
           <div class="mb-3">
             <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
             <input
-              type="text"
+              type="date"
               id="fechaInicio"
               name="fechaInicio"
               class="form-control"
               [(ngModel)]="orden.fechaInicio"
+              [min]="fechaMinima"
+              (change)="actualizarFecha($event)"
               required
             />
           </div>
@@ -359,11 +396,13 @@
               >Fecha de Entrega</label
             >
             <input
-              type="text"
+              type="date"
               id="fechaEntrega"
               name="fechaEntrega"
               class="form-control"
               [(ngModel)]="orden.fechaEntrega"
+              [min] ="fechaMinima"
+              (change)="actualizarFecha($event)"
               required
             />
           </div>
@@ -376,7 +415,11 @@
               class="form-control"
               [(ngModel)]="orden.etapa"
               required
-            />
+            />@if(!validarEtapa(orden.etapa) && orden.etapa){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                Campo obligatorio
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="estado" class="form-label">Estado</label>
@@ -388,6 +431,11 @@
               [(ngModel)]="orden.estado"
               required
             />
+             @if(!validarEstado(orden.estado) && orden.estado){
+              <div class="text-danger"> 
+                Campo obligatorio
+            </div>
+            }
           </div>
           <div class="mb-3">
             <label for="total" class="form-label">Total</label>
@@ -399,6 +447,16 @@
               [(ngModel)]="orden.total"
               required
             />
+            @if(!validarPrecio(orden.total) && orden.total){
+              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
+                Campo obligatorio
+            </div>
+            }
+            <!--
+              obtenerlo de la base de datos 
+              <div id="total" class="form-control" >
+              {{ orden.total }}
+            </div> -->
           </div>
           <div class="mb-3">
             <label for="anticipo" class="form-label">Anticipo</label>
@@ -410,6 +468,11 @@
               [(ngModel)]="orden.anticipo"
               required
             />
+            @if(!validarPrecio(orden.anticipo) && !orden.anticipo){
+              <div class="text-danger"> 
+                Campo obligatorio
+            </div>
+            }
           </div>
 
           <div class="modal-footer">
@@ -421,8 +484,8 @@
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
             }
-
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            @if(orden.cliente && orden.empleado && orden.prenda && orden.fechaInicio && orden.fechaEntrega && orden.total && orden.anticipo){
+              <button type="submit" class="btn btn-primary">Guardar</button>}
           </div>
         </form>
       </div>

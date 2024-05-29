@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   selector: 'app-sublimacion',
   standalone: true,
   imports: [FormsModule],
+  imports: [FormsModule],
   templateUrl: './sublimacion.component.html',
   styleUrl: './sublimacion.component.css'
 })
