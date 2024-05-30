@@ -47,12 +47,13 @@
                     </a>
                   </td>
                   <td>
-                    <button
+                    <!-- <button
                 class="btn btn-success mt-3"
                 (click)="modificarEtapa(orden.idOrden)"
+
               >
                 Orden terminada
-              </button>
+              </button> -->
                   </td>
                 </tr>
                 }
@@ -187,6 +188,15 @@
               [(ngModel)]="orden.total"
               disabled
             />
+          </div>
+          <div class="modal-footer">
+            <button
+                class="btn btn-success mt-3"
+                (click)="modificarEtapa(orden.idOrden)"
+
+              >
+                Orden terminada
+              </button>
           </div>
         </form>
       </div>

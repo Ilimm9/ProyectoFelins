@@ -307,6 +307,7 @@ export class OrdenesComponent {
   }
   
   obtenerOrdenes(){
+    this.obtenerPrendas();
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
         this.ordenes = datos;
@@ -315,8 +316,8 @@ export class OrdenesComponent {
   }
 
   yaEstaEnOrden(prenda: Prenda): boolean{
-    for( let p of this.ordenes){
-      if(p.prenda.idPrenda == prenda.idPrenda){
+    for( let o of this.ordenes){
+      if(o.prenda.idPrenda == prenda.idPrenda){
         return true;
       }
     }
@@ -345,10 +346,10 @@ export class OrdenesComponent {
   }
 
   validarEtapa(textoLabel: string): boolean {
-    return textoLabel.trim() !== 'diseño' && textoLabel.trim() !== 'corte' && textoLabel.trim() !== 'sublimacion';
+    return textoLabel !== 'diseño' && textoLabel !== 'corte' && textoLabel !== 'sublimacion';
 }
 validarEstado(textoLabel: string): boolean {
-  return textoLabel.trim() !== 'En progreso' && textoLabel.trim() !== 'Pendiente' && textoLabel.trim() !== 'Terminado';
+  return textoLabel !== 'En progreso' && textoLabel !== 'Pendiente' && textoLabel !== 'Terminado';
 }
 validarCantidades(cantidad: number): boolean {
   return cantidad > 12;

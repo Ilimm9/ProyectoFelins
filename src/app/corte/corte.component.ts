@@ -109,13 +109,38 @@ export class CorteComponent   {
     );
   }
 
-  modificarEtapa(id:number){
-    this.orden.etapa = 'corte' 
-    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('sublimacion'),
-      error: (errores) => console.log(errores)
-    });
-    window.location.reload();
+  // modificarEtapa(id:number){
+  //    this.orden.etapa = 'Corte' 
+  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+  //     next: (orden) => console.log('Sublimacion'),
+  //     error: (errores) => console.log(errores)
+  //   });
+  //   window.location.reload();
+  // }
+  
+  modificarEtapa(id: number) {
+    // this.cargarOrden(id)  
+    // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
+    if (this.orden.etapa === 'Corte') {
+      // Cambiar el estado a "Sublimación"
+      this.orden.etapa = 'Sublimación';
+  
+      this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+        next: (datos) => {
+          console.log('La etapa ha sido modificada a Sublimación');
+          // Recargar la página después de editar la orden
+          window.location.reload();
+        },
+        error: (errores) => console.log('Error al modificar la etapa:', errores)
+      });
+    } else {
+      // Si this.orden o this.orden.etapa no son válidos, imprimir un mensaje de error
+      console.log('No se puede cambiar la etapa porque this.orden.etapa no es válido o no es Diseño.');
+    }
   }
+  
+
+
+
 }
 

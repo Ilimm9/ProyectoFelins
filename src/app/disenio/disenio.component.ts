@@ -190,4 +190,5 @@ export class DisenioComponent {
     window.location.reload();
   }
 
+
 }
