@@ -10,6 +10,7 @@ import { OrdenesComponent } from './administrador/ordenes/ordenes.component';
 import { UsuariosComponent } from './administrador/usuarios/usuarios.component';
 import { VentanasComponent } from './ventanas/ventanas.component';
 import { HistorialComponent } from './administrador/historial/historial.component';
+import { SoporteComponent } from './administrador/soporte/soporte.component';
 // import { PruebaComponent } from './prueba/prueba.component';
 
 export const routes: Routes = [
@@ -19,7 +20,8 @@ export const routes: Routes = [
         { path: '', redirectTo: 'ordenes', pathMatch: 'full' }, // Ruta por defecto
         { path: 'ordenes', component: OrdenesComponent},
         { path: 'usuarios', component: UsuariosComponent},
-        { path: 'historial', component: HistorialComponent}
+        { path: 'historial', component: HistorialComponent},
+        { path: 'soporte', component: SoporteComponent}
     ]},
     {path: 'fase', component: VentanasComponent, children: [
         { path: 'diseño', component: DisenioComponent},
