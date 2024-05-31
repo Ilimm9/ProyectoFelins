@@ -32,6 +32,8 @@ export class OrdenesComponent {
   clientes: Cliente[];
   empleados: Empleado[];
 
+  // TotalPrenda: number;
+
 
   @ViewChild("prendaForm") prendaForm: NgForm
   @ViewChild("botonCerrarPrenda") btnCerrarPrenda: ElementRef
@@ -54,11 +56,13 @@ export class OrdenesComponent {
     private imgPrendaService : ImgPrendaService
   ){
 
-    const todayDate = new Date();
-    const day = String(todayDate.getDate()).padStart(2, '0');
-    const month = String(todayDate.getMonth() + 1).padStart(2, '0'); // Los meses en JavaScript van de 0 a 11
-    const year = todayDate.getFullYear();
-    this.today = `${year}-${month}-${day}`;
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    this.fechaMinima = `${año}-${mes}-${dia}`;
+    this.fechaMinimaEntrega = ''; // Inicialmente vacío
+
   }
 
   ngOnInit(){
@@ -134,6 +138,7 @@ export class OrdenesComponent {
       }
     );
     console.log('prenda agregado')
+    window.location.reload();
   }
 
   editarPrenda(){
@@ -330,6 +335,7 @@ export class OrdenesComponent {
     }
     return false;
   }
+  
 
   // campo = { titulo: '' }; 
 
@@ -337,12 +343,26 @@ export class OrdenesComponent {
   //   return textoLabel.trim() !== ''; //return true si es vacio
   // }
 
+
+  fecha = { fechaInicio: '', fechaEntrega: '' };
+  fechaMinima: string;
+  fechaMinimaEntrega:string;
+
+
+
   actualizarFecha(event: any) {
     const fechaSeleccionada = new Date(event.target.value);
     const año = fechaSeleccionada.getFullYear();
     const mes = (fechaSeleccionada.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
     const dia = fechaSeleccionada.getDate().toString().padStart(2, '0');
-    this.fecha.fechaEntrega = `${año}, ${mes}, ${dia}`;
+    this.fecha.fechaInicio = `${año}-${mes}-${dia}`;
+
+    const fechaMinEntrega = new Date(fechaSeleccionada);
+    fechaMinEntrega.setDate(fechaMinEntrega.getDate() + 3);
+    const añoEntrega = fechaMinEntrega.getFullYear();
+    const mesEntrega = (fechaMinEntrega.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
+    const diaEntrega = fechaMinEntrega.getDate().toString().padStart(2, '0');
+    this.fechaMinimaEntrega = `${añoEntrega}-${mesEntrega}-${diaEntrega}`;
   }
 
   campo = { titulo: '' }; // Objeto prenda con propiedad titulo inicializada como cadena vacía
@@ -359,22 +379,11 @@ validarEstado(textoLabel: string): boolean {
   return textoLabel !== 'En progreso' && textoLabel !== 'Pendiente' && textoLabel !== 'Terminado';
 }
 validarCantidades(cantidad: number): boolean {
-  return cantidad > 12;
+  return cantidad >= 12;
 }
 validarPrecio(cantidad: number): boolean {
   return cantidad > 0;
 }
-
-  validarFechas(){
-
-  }
-  validarCampos(){
-
-  }
-
-  fecha = { fechaEntrega: '' };
-  fechaMinima: string;
-
 
 
 }
