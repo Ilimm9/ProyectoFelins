@@ -360,7 +360,7 @@ export class UsuariosComponent {
 
   //PARA EL CRUD DE DEPARTAMENTOS
 
-  private obtenerDepartamentos() {
+  obtenerDepartamentos() {
     this.departamentoService.obtenerDepartamentos().subscribe(
       (datos => {
         this.departamentos = datos;
