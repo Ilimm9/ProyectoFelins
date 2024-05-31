@@ -77,6 +77,13 @@ export class OrdenesComponent {
   
   }
 
+  cargarDatos(){
+    this.obtenerOrdenes();
+    this.obtenerPrendas();
+    this.obtenerClientes();
+    this.obtenerEmpleados();
+  }
+
   obtenerEmpleados() {
     this.empleadoService.obtenerEmpleados().subscribe(
       (datos => {
