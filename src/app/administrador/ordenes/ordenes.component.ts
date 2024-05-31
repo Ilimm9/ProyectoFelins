@@ -11,12 +11,13 @@ import { EmpleadosService } from '../../service/empleados.service';
 import { ClientesService } from '../../service/clientes.service';
 import { DatePipe } from '@angular/common';
 import { ImgPrendaService } from '../../service/img-prenda.service';
+import { AlertMessagesModule, AlertMessagesService } from 'jjwins-angular-alert-messages';
 
 
 @Component({
   selector: 'app-ordenes',
   standalone: true,
-  imports: [FormsModule, DatePipe
+  imports: [FormsModule, DatePipe, AlertMessagesModule
   ],
   templateUrl: './ordenes.component.html',
   styleUrl: './ordenes.component.css'
@@ -32,6 +33,7 @@ export class OrdenesComponent {
   clientes: Cliente[];
   empleados: Empleado[];
 
+  modal: string = '';
 
   @ViewChild("prendaForm") prendaForm: NgForm
   @ViewChild("botonCerrarPrenda") btnCerrarPrenda: ElementRef
@@ -43,16 +45,17 @@ export class OrdenesComponent {
   // Define una variable para almacenar el archivo globalmente
   archivoSeleccionado: File | null = null;
   previewUrl: string | null = null;
-  
+
   today: string;
 
-  constructor(private prendaService: PrendaService, 
+  constructor(private prendaService: PrendaService,
     private ordenService: OrdenService,
     private empleadoService: EmpleadosService,
     private clienteService: ClientesService,
     private router: Router,
-    private imgPrendaService : ImgPrendaService
-  ){
+    private imgPrendaService: ImgPrendaService,
+    private alertMessage: AlertMessagesService
+  ) {
 
     const todayDate = new Date();
     const day = String(todayDate.getDate()).padStart(2, '0');
@@ -61,11 +64,11 @@ export class OrdenesComponent {
     this.today = `${year}-${month}-${day}`;
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.obtenerPrendas();
     this.obtenerOrdenes();
-    
-    this.inicializarDatosPrenda(); 
+
+    this.inicializarDatosPrenda();
     this.inicializarDatosOrden();
 
     this.obtenerClientes();
@@ -74,14 +77,7 @@ export class OrdenesComponent {
     const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
     const dia = hoy.getDate().toString().padStart(2, '0');
     this.fechaMinima = `${hoy.getFullYear()}-${mes}-${dia}`;
-  
-  }
 
-  cargarDatos(){
-    this.obtenerOrdenes();
-    this.obtenerPrendas();
-    this.obtenerClientes();
-    this.obtenerEmpleados();
   }
 
   obtenerEmpleados() {
@@ -102,19 +98,19 @@ export class OrdenesComponent {
     );
     console.log(this.clientes)
   }
-  
+
   //metodos para manipulacion de las prendas
 
-  eliminarPrenda(id: number){
+  eliminarPrenda(id: number) {
     this.prendaService.eliminarPrenda(id).subscribe({
       next: (datos) => this.obtenerPrendas(),
       error: (errores) => console.log(errores)
     });
   }
 
-  accionPrenda(prendaForm: NgForm){
-    if(this.prenda.idPrenda != 0){
-      //toca editar
+  accionPrenda(prendaForm: NgForm) {
+    this.modal = 'prenda';
+    if (this.prenda.idPrenda != 0) {
       this.editarPrenda();
     } else {
       this.agregarPrenda();
@@ -122,25 +118,36 @@ export class OrdenesComponent {
     //cerramos el modal
     this.prendaForm.resetForm();
     this.btnCerrarPrenda.nativeElement.click();
+
   }
 
-  agregarPrenda(){
+  agregarPrenda() {
     this.prendaService.agregarPrenda(this.prenda).subscribe(
       {
         next: (datos) => {
-          this.router.navigate(['/administracion/ordenes']);
+          this.router.navigate(['/administracion']).then(() => {
+            this.obtenerPrendas();
+            this.alertMessage.show('Se Creo la prenda exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('prenda agregada')
+          })
+
         },
-        error: (error: any) => {console.log(error)}
+        error: (error: any) => { console.log(error) }
       }
     );
-    console.log('prenda agregado')
+
   }
 
-  editarPrenda(){
+  editarPrenda() {
     this.prendaService.editarPrenda(this.prenda.idPrenda, this.prenda).subscribe({
       next: (datos) => {
-        console.log('datos cambiados');
-        if(this.archivoSeleccionado != null){
+
+        this.router.navigate(['/administracion']).then(() => {
+          this.obtenerPrendas();
+          this.alertMessage.show('Se Modifico la prenda exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+          console.log('prenda modificada')
+        });
+        if (this.archivoSeleccionado != null) {
           this.subirImagenPrenda(this.prenda.idPrenda);
           console.log('imagen cambiada');
         }
@@ -148,24 +155,20 @@ export class OrdenesComponent {
       error: (errores) => console.log(errores)
     });
 
-    this.router.navigate(['/administracion/ordenes']).then(() => {
-      // window.location.reload();
-      this.obtenerPrendas();
-    })
-
   }
 
-  limpiarDatosPrenda(){
+  limpiarDatosPrenda() {
     this.prenda = new Prenda();
     this.inicializarDatosPrenda();
     this.imagenUrl = "";
+    this.previewUrl = '';
   }
 
-  inicializarDatosPrenda(){
+  inicializarDatosPrenda() {
     this.prenda.idPrenda = 0;
   }
 
-  cargarPrenda(id: number){
+  cargarPrenda(id: number) {
     this.prenda.idPrenda = id;
     this.prendaService.obtenerPrendaPorId(id).subscribe(
       {
@@ -179,7 +182,7 @@ export class OrdenesComponent {
     console.log('regresamos')
   }
 
-  obtenerPrendas(){
+  obtenerPrendas() {
     this.prendaService.obtenerPrendas().subscribe(
       (datos => {
         this.prendas = datos;
@@ -201,17 +204,7 @@ export class OrdenesComponent {
       reader.readAsDataURL(this.archivoSeleccionado);
     }
 
-
-      
-      // reader.onload = () => {
-      //   // No necesitas asignar la imagen a la propiedad logo de la prenda
-      //   // this.prenda.logo = reader.result as ArrayBuffer;
-      //   // Simplemente llama al método para subir la imagen
-      //   //this.subirImagenPrenda(this.prenda.idPrenda);
-      // };
-
-      // reader.readAsArrayBuffer(this.archivoSeleccionado);
- }
+  }
 
   subirImagenPrenda(idPrenda: number): void {
     // Asegúrate de que la prenda tenga un ID válido
@@ -221,7 +214,7 @@ export class OrdenesComponent {
     }
 
     // Llama al servicio para agregar la imagen a la prenda en la base de datos
-    if(this.archivoSeleccionado == null){
+    if (this.archivoSeleccionado == null) {
       console.log('no se selecciono un archivo')
       return;
     }
@@ -252,16 +245,35 @@ export class OrdenesComponent {
 
   //metodos para manipulacion de las ordenes
 
-  eliminarOrden(id: number){
+  actualizarPrecio(){
+    console.log('Entramos a calcular el total')
+    let total = 0;
+    for(let p of this.prendas){
+      if(p.idPrenda == this.orden.prenda.idPrenda){
+        total = p.cantidad * p.precio;
+        break;
+      }
+    }
+    this.orden.total = total;
+  }
+
+  cargarDatos() {
+    this.obtenerOrdenes();
+    this.obtenerPrendas();
+    this.obtenerClientes();
+    this.obtenerEmpleados();
+  }
+
+  eliminarOrden(id: number) {
     this.ordenService.eliminarOrden(id).subscribe({
       next: (datos) => this.obtenerOrdenes(),
       error: (errores) => console.log(errores)
     });
   }
 
-  accionOrden(ordenForm: NgForm){
-    if(this.orden.idOrden != 0){
-      //toca editar
+  accionOrden(ordenForm: NgForm) {
+    this.modal = 'orden'
+    if (this.orden.idOrden != 0) {
       this.editarOrden();
     } else {
       this.agregarOrden();
@@ -271,49 +283,61 @@ export class OrdenesComponent {
     this.btnCerrarOrden.nativeElement.click();
   }
 
-  agregarOrden(){
+  agregarOrden() {
+    console.log(this.orden);
     this.ordenService.agregarOrden(this.orden).subscribe(
       {
         next: (datos) => {
-          this.router.navigate(['/administracion/ordenes']);
+          this.router.navigate(['/administracion']).then(() => {
+            this.obtenerOrdenes();
+            this.alertMessage.show('Se Creo la Orden Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('Orden agregada')
+          })
+          console.log(datos);
         },
-        error: (error: any) => {console.log(error)}
+        error: (error: any) => { console.log(error) }
       }
     );
-    console.log('orden agregada')
   }
 
-  editarOrden(){
+  editarOrden() {
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
+      next: (datos) => {
+        this.router.navigate(['/administracion']).then(() => {
+          this.obtenerOrdenes();
+          this.alertMessage.show('Se Modifico la Orden Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+          console.log('Orden modificada')
+        })
+        console.log(datos);
+      },
       error: (errores) => console.log(errores)
     });
-    this.router.navigate(['/administracion/ordenes']).then(() => {
-      // window.location.reload();
-      this.obtenerOrdenes();
-    })
 
   }
 
-  limpiarDatosOrden(){
+  limpiarDatosOrden() {
     this.orden = new Orden();
     this.inicializarDatosOrden();
   }
 
-  inicializarDatosOrden(){
+  inicializarDatosOrden() {
     this.orden.idOrden = 0;
   }
 
-  cargarOrden(id: number){
+  cargarOrden(id: number) {
     this.ordenService.obtenerOrdenPorId(id).subscribe(
       {
-        next: (datos) => this.orden = datos,
+        next: (datos) => {
+          this.orden = datos;
+          console.log(datos)
+        },
         error: (errores: any) => console.log(errores)
       }
     );
+    
   }
-  
-  obtenerOrdenes(){
+
+  obtenerOrdenes() {
     this.obtenerPrendas();
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
@@ -322,9 +346,9 @@ export class OrdenesComponent {
     );
   }
 
-  yaEstaEnOrden(prenda: Prenda): boolean{
-    for( let o of this.ordenes){
-      if(o.prenda.idPrenda == prenda.idPrenda){
+  yaEstaEnOrden(prenda: Prenda): boolean {
+    for (let o of this.ordenes) {
+      if (o.prenda.idPrenda == prenda.idPrenda) {
         return true;
       }
     }
@@ -354,21 +378,21 @@ export class OrdenesComponent {
 
   validarEtapa(textoLabel: string): boolean {
     return textoLabel !== 'diseño' && textoLabel !== 'corte' && textoLabel !== 'sublimacion';
-}
-validarEstado(textoLabel: string): boolean {
-  return textoLabel !== 'En progreso' && textoLabel !== 'Pendiente' && textoLabel !== 'Terminado';
-}
-validarCantidades(cantidad: number): boolean {
-  return cantidad > 12;
-}
-validarPrecio(cantidad: number): boolean {
-  return cantidad > 0;
-}
+  }
+  validarEstado(textoLabel: string): boolean {
+    return textoLabel !== 'En progreso' && textoLabel !== 'Pendiente' && textoLabel !== 'Terminado';
+  }
+  validarCantidades(cantidad: number): boolean {
+    return cantidad > 12;
+  }
+  validarPrecio(cantidad: number): boolean {
+    return cantidad > 0;
+  }
 
-  validarFechas(){
+  validarFechas() {
 
   }
-  validarCampos(){
+  validarCampos() {
 
   }
 

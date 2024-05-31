@@ -32,6 +32,11 @@ export class LoginComponent {
   ngOnInit() {
     if (this.empleadoLoggedService.getIsLogin()) {
       this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
+      if (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre.toLowerCase() !== 'administracion') {
+        this.router.navigate(['/fase/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
+      } else {
+        this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
+      }    
     }
     this.obtenerEmpleados();
 

@@ -1,6 +1,7 @@
 <!-- Container fluid -->
 <div class="bg-primary pt-20 pb-21"></div>
 <div class="container-fluid mt-n22 px-6">
+  
   <div class="row">
     <div class="col-lg-12 col-md-12 col-12">
       <!-- Page header -->
@@ -100,6 +101,9 @@
                 <i class="fa-solid fa-users mx-2"></i> Listado de Empleados
               </h4>
             </div>
+            <div>
+              <jjwins-alert-messages> </jjwins-alert-messages>
+            </div>
             <div class="ml-auto">
               <a
                 class="btn btn-primary"
@@ -155,7 +159,6 @@
       </section>
     </div>
   </div>
-
 
   <!-- row  -->
   <div class="row my-6">
@@ -447,9 +450,18 @@
                 class="centered-and-resized"
               />
             </div>
-            } @else {
+            } @else { @if(previewUrl){
+            <div class="image-container mt-5 mb-2">
+              <img
+                [src]="previewUrl"
+                alt="Imagen de la prenda"
+                class="centered-and-resized"
+              />
+            </div>
+
+            }@else {
             <p>Aun no se ha agregado un Logo</p>
-            }
+            } }
           </div>
           }
 

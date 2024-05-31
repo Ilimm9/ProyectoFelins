@@ -10,6 +10,11 @@
           <div class="mt-2">
             <h4><i class="fa-solid fa-users mx-2"></i> Lista de Prendas</h4>
           </div>
+          @if(modal === 'prenda'){
+            <div>
+              <jjwins-alert-messages> </jjwins-alert-messages>
+            </div>
+            }
           <div class="ml-auto">
             <a
               class="btn btn-primary"
@@ -66,6 +71,11 @@
           <div class="mt-2">
             <h4><i class="fa-solid fa-building"></i> Listado de Ordenes</h4>
           </div>
+          @if(modal === 'orden'){
+          <div>
+            <jjwins-alert-messages> </jjwins-alert-messages>
+          </div>
+          }
           <div class="ml-auto">
             <a
               class="btn btn-primary"
@@ -251,9 +261,18 @@
                 class="centered-and-resized"
               />
             </div>
-            } @else {
+            } @else { @if(previewUrl){
+            <div class="image-container mt-5 mb-2">
+              <img
+                [src]="previewUrl"
+                alt="Imagen de la prenda"
+                class="centered-and-resized"
+              />
+            </div>
+
+            }@else {
             <p>Aun no se ha agregado un Logo</p>
-            }
+            } }
           </div>
 
           }
@@ -343,10 +362,11 @@
               class="form-control"
               [(ngModel)]="orden.prenda"
               required
+              (change)="actualizarPrecio()"
             >
               @for (prenda of prendas; track prenda.idPrenda){
               @if(!yaEstaEnOrden(prenda)){
-              <option [ngValue]="prenda">{{ prenda.titulo }}</option>
+              <option [ngValue]="prenda" >{{ prenda.titulo }}</option>
               } }
             </select>
           </div>
@@ -426,7 +446,7 @@
             />@if(validarEtapa(orden.etapa) && orden.etapa){
             <div class="text-danger">
               <!-- Mostrar advertencia si campoVacio es true -->
-              Ingrese una etapa valida (diseño, corte,sublimacion o confeccion)
+              Ingrese una etapa valida (diseño |corte |sublimacion |confeccion)
             </div>
             }
           </div>
@@ -455,6 +475,7 @@
               class="form-control"
               [(ngModel)]="orden.total"
               required
+              disabled
             />
             @if(!validarPrecio(orden.total) && orden.total){
             <div class="text-danger">

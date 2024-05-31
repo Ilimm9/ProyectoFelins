@@ -9,11 +9,14 @@ import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ImgUsuarioService } from '../../service/img-usuario.service';
 import { Observable, of, tap } from 'rxjs';
+import { AlertMessagesModule, AlertMessagesService } from 'jjwins-angular-alert-messages';
+import { OrdenService } from '../../service/orden.service';
+import { Orden } from '../../models/orden';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, AlertMessagesModule],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })
@@ -21,6 +24,7 @@ export class UsuariosComponent {
   departamentos: Departamento[]
   clientes: Cliente[]
   empleados: Empleado[]
+  ordenes: Orden[]
 
   empleado: Empleado = new Empleado();
   cliente: Cliente = new Cliente();
@@ -40,7 +44,9 @@ export class UsuariosComponent {
     private clienteService: ClientesService,
     private empleadoService: EmpleadosService,
     private imagenEmpleadoService: ImgUsuarioService,
-    private router: Router
+    private router: Router,
+    private alertMessage: AlertMessagesService,
+    private ordenService: OrdenService
   ) {
 
   }
@@ -48,8 +54,10 @@ export class UsuariosComponent {
   imagenUrl: string; // Variable para almacenar la URL de la imagen
   // Define una variable para almacenar el archivo globalmente
   archivoSeleccionado: File | null = null;
+  previewUrl: string | null = null;
 
   ngOnInit() {
+    this.obtenerOrdenes();
     this.obtenerDepartamentos();
     this.obtenerClientes();
     this.obtenerEmpleados();
@@ -57,6 +65,14 @@ export class UsuariosComponent {
     this.inicilizarDatosEmpleado();
     this.inicilizarDatosCliente();
     this.inicilizarDatosDepto();
+  }
+
+  obtenerOrdenes() {
+    this.ordenService.obtenerOrdenes().subscribe(
+      (datos => {
+        this.ordenes = datos;
+      })
+    );
   }
 
   //PARA EL CRUD DE EMPLEADOS
@@ -70,9 +86,11 @@ export class UsuariosComponent {
 
   limpiarDatosEmpleado() {
     this.empleado = new Empleado();
+    this.empleado.idUsuario = 0;
     this.inicilizarDatosEmpleado();
     this.empleadoForm.resetForm();
     this.imagenUrl = "";
+    this.previewUrl = "";
   }
 
   eliminarEmpleado(id: number) {
@@ -103,22 +121,17 @@ export class UsuariosComponent {
     this.empleadoService.agregarEmpleado(this.empleado).subscribe(
       {
         next: (datos) => {
-          //son los datos regresados pero por el momento no se ocupan
-          this.obtenerEmpleados();
-          this.router.navigate(['/administracion/usuarios']);
-
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerEmpleados();
+            this.alertMessage.show('Empleado Agregado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('empleado agregado')
+          });
+          console.log(datos);
         },
         error: (error: any) => { console.log(error) }
       }
     );
-
-    //despues de agregar el usuario agregamos la imagen
-    if(this.archivoSeleccionado != null){
-      console.log('id a meter img: ' + this.empleados[this.empleados.length-1].idUsuario)
-      this.subirImagenEmpleado(this.empleados[this.empleados.length-1].idUsuario);
-      console.log('imagen agregada');
-    }
-    console.log('empleado agregado')
+    
   }
 
   editarEmpleado() {
@@ -126,20 +139,22 @@ export class UsuariosComponent {
     this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
       {
         next: (datos) => {
-          console.log('datos cambiados');
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerEmpleados();
+            this.alertMessage.show('Empleado Modificado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('empleado modificado')
+          });
+          console.log(datos);
           console.log(this.archivoSeleccionado)
-          if(this.archivoSeleccionado != null){
+          if (this.archivoSeleccionado != null) {
             this.subirImagenEmpleado(this.empleado.idUsuario);
-            console.log('imagen cambiada');
+            console.log('imagen cargada en la BD');
           }
         },
         error: (errores) => console.log(errores)
       }
     );
-    this.router.navigate(['/administracion/usuarios']).then(() => {
-      // window.location.reload();
-      this.obtenerEmpleados();
-    })
+
   }
 
   //Al dar clic en editar se carga la variable con los datos del empleado correspondiente
@@ -157,11 +172,7 @@ export class UsuariosComponent {
   }
 
   comprasTotales(): number {
-    let total = 0;
-    this.clientes.forEach(cliente => {
-      total += cliente.totalCompras;
-    })
-    return total
+    return this.ordenes.length;
   }
 
   empleadosActivos(): number {
@@ -198,16 +209,15 @@ export class UsuariosComponent {
     if (input.files && input.files.length > 0) {
       // Almacena el archivo seleccionado en la variable archivoSeleccionado
       this.archivoSeleccionado = input.files[0];
+
+      // Generar una URL de vista previa
       const reader = new FileReader();
-
       reader.onload = () => {
-        // No necesitas asignar la imagen a la propiedad logo de la prenda
-        // this.prenda.logo = reader.result as ArrayBuffer;
-        // Simplemente llama al método para subir la imagen
-        //this.subirImagenEmpleado(this.prenda.idPrenda);
+        this.previewUrl = reader.result as string;
       };
+      reader.readAsDataURL(this.archivoSeleccionado);
 
-      reader.readAsArrayBuffer(this.archivoSeleccionado);
+      // reader.readAsArrayBuffer(this.archivoSeleccionado);
     }
   }
 
@@ -235,17 +245,17 @@ export class UsuariosComponent {
   subirImagenEmpleadoAgregar(idUsuario: number): Observable<any> {
     // Asegúrate de que la prenda tenga un ID válido
     if (!idUsuario) {
-        console.error('La prenda no tiene un ID válido.');
-        return of(null); // Devolver un observable nulo
+      console.error('La prenda no tiene un ID válido.');
+      return of(null); // Devolver un observable nulo
     }
 
     // Llama al servicio para agregar la imagen a la prenda en la base de datos
     if (this.archivoSeleccionado == null) {
-        console.log('no se selecciono un archivo');
-        return of(null); // Devolver un observable nulo
+      console.log('no se selecciono un archivo');
+      return of(null); // Devolver un observable nulo
     }
     return this.imagenEmpleadoService.agregarImagenEmpleado(idUsuario, this.archivoSeleccionado);
-}
+  }
 
 
   obtenerImagenEmpleado(idUsuario: number): void {
@@ -344,7 +354,7 @@ export class UsuariosComponent {
     this.cliente = new Cliente();
     this.inicilizarDatosCliente();
     this.clienteForm.resetForm();
-    
+
   }
 
 
