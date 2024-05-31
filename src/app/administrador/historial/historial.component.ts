@@ -7,6 +7,8 @@ import { Cliente } from '../../models/cliente';
 import { Prenda } from '../../models/prenda';
 import { Orden } from '../../models/orden';
 import { Empleado } from '../../models/empleado';
+import { EmpleadosService } from '../../service/empleados.service';
+import { Departamento } from '../../models/departamento';
 
 @Component({
   selector: 'app-historial',
@@ -24,6 +26,9 @@ export class HistorialComponent {
 
   clientes: Cliente[];
   empleados: Empleado[];
+  departamentos: Departamento[]
+
+  empleado: Empleado = new Empleado();
 
 
   @ViewChild("prendaForm") prendaForm: NgForm
@@ -32,14 +37,17 @@ export class HistorialComponent {
   @ViewChild("ordenForm") ordenForm: NgForm
   @ViewChild("botonCerrarOrden") btnCerrarOrden: ElementRef
 
-  constructor(private prendaService: PrendaService, 
+  constructor(private prendaService: PrendaService,
+    private empleadoService: EmpleadosService,
     private ordenService: OrdenService,
     private router: Router
-  ){
+  ) {
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.obtenerEmpleados();
+
     this.obtenerOrdenes();
     this.orden.cliente = new Cliente();
     this.orden.prenda = new Prenda();
@@ -47,29 +55,31 @@ export class HistorialComponent {
   }
 
 
-  accionOrden(ordenForm: NgForm){
-    if(this.orden.idOrden != 0){
+
+
+  accionOrden(ordenForm: NgForm) {
+    if (this.orden.idOrden != 0) {
       //toca editar
       this.editarOrden();
-    } 
+    }
     //cerramos el modal
     this.ordenForm.resetForm();
     this.btnCerrarOrden.nativeElement.click();
   }
 
-  eliminarVistaOrden(){
+  eliminarVistaOrden() {
     this.ordenService.agregarOrden(this.orden).subscribe(
       {
         next: (datos) => {
           this.router.navigate(['/diseño']);
         },
-        error: (error: any) => {console.log(error)}
+        error: (error: any) => { console.log(error) }
       }
     );
     console.log('orden agregada')
   }
 
-  editarOrden(){
+  editarOrden() {
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
       next: (datos) => console.log('realizado'),
       error: (errores) => console.log(errores)
@@ -80,8 +90,8 @@ export class HistorialComponent {
 
   }
 
-  modificarStatus(id: number, ){
-    this.orden.etapa='sublimacion'
+  modificarStatus(id: number,) {
+    this.orden.etapa = 'sublimacion'
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
       next: (datos) => console.log('realizado'),
       error: (errores) => console.log(errores)
@@ -89,7 +99,7 @@ export class HistorialComponent {
     window.location.reload();
   }
 
-  cargarOrden(id: number){
+  cargarOrden(id: number) {
     this.ordenService.obtenerOrdenPorId(id).subscribe(
       {
         next: (datos) => this.orden = datos,
@@ -98,14 +108,60 @@ export class HistorialComponent {
     );
     console.log(id)
   }
-  
-  obtenerOrdenes(){
+
+  obtenerOrdenes() {
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.estado.toLowerCase() === 'terminado');
-      console.log(this.ordenes)
+        this.ordenes = datos.filter((orden) => orden.estado.toLowerCase() === 'terminado');
+        console.log(this.ordenes)
       })
     );
+  }
+
+  //para empleados
+
+
+  activarEmpleado(id: number) {
+    this.empleado.idUsuario = id;
+    this.empleadoService.obtenerEmpleadoPorId(id).subscribe(
+      {
+        next: (datos) => {
+          this.empleado = datos
+
+          this.empleado.activo = true;
+          this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
+            {
+              next: (datos) => {
+                console.log('datos cambiados');
+                this.router.navigate(['/administracion/historial']);
+                window.location.reload();
+              },
+              error: (errores) => console.log(errores)
+            }
+          );
+
+        },
+        error: (errores: any) => console.log(errores)
+      }
+    );
+
+  }
+
+
+  private obtenerEmpleados() {
+    this.empleadoService.obtenerEmpleados().subscribe(
+      (datos => {
+        this.empleados = datos;
+      })
+    );
+    console.log(this.empleados);
+  }
+
+  obtenerNombresDepartamentos(depto: Departamento[]): string {
+    // Utilizamos map para obtener un array de nombres de departamentos
+    const nombres: string[] = depto.map((depto: Departamento) => depto.nombre);
+    // Usamos join para unir los nombres con '|'
+    return nombres.join(' | ');
   }
 
 

@@ -48,14 +48,18 @@ export class LoginComponent {
 
   login() {
     let encontrado = false
+    let mensaje = '';
     this.empleados.forEach(empleado => {
+
       if (empleado.usuario === this.usuario && empleado.password == this.password) {
+
+        if(!empleado.activo){
+          mensaje = 'Usuario Fuera de Servicio'
+          return
+        }
         //este empleado se actualiza en el servicio
         this.empleado = empleado;
         console.log('puedes entrar');
-        console.log(empleado.usuario)
-        console.log(empleado.password)
-        console.log((empleado.departamentos[0].nombre).toLowerCase)
 
         this.empleadoLoggedService.setEmpleado(empleado);
         this.empleadoLoggedService.setIsLogin(true);
@@ -68,12 +72,14 @@ export class LoginComponent {
         //este actualiza la variable bool para login
         encontrado = true
         return
+      } else {
+        mensaje = 'Verifica tu Usuario y Contraseña'
       }
     })
 
     if (!encontrado) {
-      console.log('no encontrado')
-      this.alertMessage.show('Verifica tu usuario y contraseña', { cssClass: 'alert alert-warning', timeOut: 3000 })
+      console.log('no puedes iniciar session')
+      this.alertMessage.show(mensaje, { cssClass: 'alert alert-warning', timeOut: 3000 })
       this.usuario = ''
       this.password = ''
     }
