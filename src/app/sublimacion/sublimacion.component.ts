@@ -102,7 +102,7 @@ export class SublimacionComponent {
   obtenerOrdenes(){
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.etapa === 'Sublimacion');
+        this.ordenes = datos.filter((orden)=>orden.etapa.toLowerCase() === 'sublimacion');
       console.log(this.ordenes)
       })
     );

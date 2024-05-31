@@ -36,6 +36,16 @@
   font-size: 24px; /* Ajusta el tamaño del icono según sea necesario */
 }
 
+.image-container {
+  text-align: center; /* Para centrar la imagen horizontalmente */
+}
+
+.centered-and-resized {
+  width: 100px; /* Ancho de la imagen */
+  height: 100px; /* Alto de la imagen */
+  object-fit: cover; /* Para mantener la relación de aspecto y cubrir completamente el contenedor */
+}
+
 .align-top {
   vertical-align: top !important;
 }

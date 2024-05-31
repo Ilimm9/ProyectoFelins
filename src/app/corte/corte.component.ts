@@ -103,7 +103,7 @@ export class CorteComponent   {
   obtenerOrdenes(){
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.etapa === 'Corte');
+        this.ordenes = datos.filter((orden)=>orden.etapa.toLowerCase() === 'corte');
       console.log(this.ordenes)
       })
     );

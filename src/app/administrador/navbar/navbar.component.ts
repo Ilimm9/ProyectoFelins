@@ -13,47 +13,6 @@ import { ImgUsuarioService } from '../../service/img-usuario.service';
 })
 export class NavbarComponent {
 
-  // empleado: Empleado | null = null;
-  // isLogin: boolean = false;
-  // imagenUrl: string;
-
-  // constructor(
-  //   private empleadoLoggedService: EmpleadoLoggedService,
-  //   private imagenEmpleadoService: ImgUsuarioService) {}
-
-  // async ngOnInit() {
-  //   // Obtener el empleado y el estado de login de forma asíncrona
-  //   this.empleado = await this.empleadoLoggedService.getEmpleado();
-  //   this.isLogin = await this.empleadoLoggedService.getIsLogin();
-
-  //   console.log(this.isLogin);
-  //   console.log(this.empleado?.nombre);
-
-  //   if (this.empleado != null) {
-  //     await this.obtenerImagenEmpleado(this.empleado.idUsuario);
-  //   } else {
-  //     console.log('usuario nulo');
-  //   }
-  // }
-
-  // async obtenerImagenEmpleado(idUsuario: number): Promise<void> {
-  //   console.log('vamos a intentar ver la imagen');
-  //   try {
-  //     const imagen = await this.imagenEmpleadoService.obtenerImagenEmpleado(idUsuario).toPromise();
-  //     if (imagen) {
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => {
-  //         this.imagenUrl = reader.result as string;
-  //       };
-  //       reader.readAsDataURL(imagen);
-  //     } else {
-  //       console.error('La imagen es undefined');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error al obtener imagen de la prenda: ', error);
-  //   }
-  //   console.log(this.imagenUrl);
-  // }
   empleado: Empleado | null = null;
   isLogin: boolean = false;
   imagenUrl: string;

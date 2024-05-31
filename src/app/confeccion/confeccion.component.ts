@@ -102,7 +102,7 @@ export class ConfeccionComponent {
   obtenerOrdenes(){
     this.ordenService.obtenerOrdenes().subscribe(
       (datos => {
-        this.ordenes = datos.filter((orden)=>orden.etapa === 'Confeccion');
+        this.ordenes = datos.filter((orden)=>orden.etapa.toLowerCase() === 'confeccion');
       console.log(this.ordenes)
       })
     );

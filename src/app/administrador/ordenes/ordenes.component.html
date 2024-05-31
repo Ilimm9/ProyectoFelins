@@ -133,10 +133,10 @@
         @if(prenda.idPrenda == 0){
         <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Prenda</h1>
         }@else{
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Prenda</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Prenda</h1>
 
         }
-          <button
+        <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
@@ -154,12 +154,13 @@
               name="titulo"
               class="form-control"
               [(ngModel)]="prenda.titulo"
-              (input)="validarCampoNoVacio(prenda.titulo)" 
+              (input)="validarCampoNoVacio(prenda.titulo)"
               required
             />
             @if(!campoVacio && !prenda.titulo){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                El título es requerido.
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              El título es requerido.
             </div>
             }
           </div>
@@ -170,12 +171,13 @@
               name="descripcion"
               class="form-control"
               [(ngModel)]="prenda.descripcion"
-              (input)="validarCampoNoVacio(prenda.descripcion)" 
+              (input)="validarCampoNoVacio(prenda.descripcion)"
               required
             ></textarea>
             @if(!campoVacio && !prenda.descripcion){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                La descripcion es requerido.
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              La descripcion es requerido.
             </div>
             }
           </div>
@@ -190,8 +192,9 @@
               required
             />
             @if(!validarCantidades(prenda.cantidad) && prenda.cantidad){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                La cantidad debe ser mayor a 12
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              La cantidad debe ser mayor a 12
             </div>
             }
           </div>
@@ -207,8 +210,9 @@
             />
 
             @if(!validarPrecio(prenda.precio) && prenda.cantidad){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                Campo obligatorio
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              Campo obligatorio
             </div>
             }
           </div>
@@ -223,7 +227,7 @@
           </div>
 
           @if(prenda.idPrenda != 0){
-            
+
           <div class="my-5">
             <div class="mx-auto w-100">
               <label class="text-center mb-3">Agregar Logo</label>
@@ -240,16 +244,19 @@
               </div>
             </div>
             @if(imagenUrl){
-              <div class="image-container mt-5 mb-2">
-                <img [src]="imagenUrl" alt="Imagen de la prenda" class="centered-and-resized">
-              </div>
+            <div class="image-container mt-5 mb-2">
+              <img
+                [src]="imagenUrl"
+                alt="Imagen de la prenda"
+                class="centered-and-resized"
+              />
+            </div>
             } @else {
-              <p>Aun no se ha agregado un Logo</p>
+            <p>Aun no se ha agregado un Logo</p>
             }
-            
           </div>
 
-            }
+          }
           <div class="modal-footer">
             @if(prenda.idPrenda != 0){
             <button
@@ -258,8 +265,8 @@
             >
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
-            }
-            @if(prenda.titulo && prenda.descripcion && prenda.cantidad && prenda.precio){
+            } @if(prenda.titulo && prenda.descripcion && prenda.cantidad &&
+            prenda.precio){
             <button type="submit" class="btn btn-primary">Guardar</button>}
           </div>
         </form>
@@ -282,10 +289,10 @@
       <div class="modal-header">
         @if(orden.idOrden == 0){
         <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Orden</h1>
-      }@else{
+        }@else{
         <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Orden</h1>
-      }
-      <button
+        }
+        <button
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
@@ -402,7 +409,7 @@
               name="fechaEntrega"
               class="form-control"
               [(ngModel)]="orden.fechaEntrega"
-              [min] ="fechaMinima"
+              [min]="fechaMinima"
               (change)="actualizarFecha($event)"
               required
             />
@@ -417,8 +424,9 @@
               [(ngModel)]="orden.etapa"
               required
             />@if(validarEtapa(orden.etapa) && orden.etapa){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                Ingrese una etapa valida (diseño, corte,sublimacion o confeccion)
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              Ingrese una etapa valida (diseño, corte,sublimacion o confeccion)
             </div>
             }
           </div>
@@ -432,9 +440,9 @@
               [(ngModel)]="orden.estado"
               required
             />
-             @if(validarEstado(orden.estado) && orden.estado){
-              <div class="text-danger"> 
-                Ingrese un estado valido (En proceso, Pendiente)
+            @if(validarEstado(orden.estado) && orden.estado){
+            <div class="text-danger">
+              Ingrese un estado valido (En proceso, Pendiente)
             </div>
             }
           </div>
@@ -449,8 +457,9 @@
               required
             />
             @if(!validarPrecio(orden.total) && orden.total){
-              <div class="text-danger"> <!-- Mostrar advertencia si campoVacio es true -->
-                Campo obligatorio
+            <div class="text-danger">
+              <!-- Mostrar advertencia si campoVacio es true -->
+              Campo obligatorio
             </div>
             }
             <!--
@@ -470,9 +479,7 @@
               required
             />
             @if(!validarPrecio(orden.anticipo) && !orden.anticipo){
-              <div class="text-danger"> 
-                Campo obligatorio
-            </div>
+            <div class="text-danger">Campo obligatorio</div>
             }
           </div>
 
@@ -484,9 +491,10 @@
             >
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
-            }
-            @if(orden.cliente && orden.empleado && orden.prenda && orden.fechaInicio && orden.fechaEntrega && orden.total && orden.anticipo){
-              <button type="submit" class="btn btn-primary">Guardar</button>}
+            } @if(orden.cliente && orden.empleado && orden.prenda &&
+            orden.fechaInicio && orden.fechaEntrega && orden.total &&
+            orden.anticipo){
+            <button type="submit" class="btn btn-primary">Guardar</button>}
           </div>
         </form>
       </div>
