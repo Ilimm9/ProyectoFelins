@@ -47,11 +47,11 @@ export class AlmacenComponent {
   constructor(private materialService: InventarioService,
     private router: Router,
     private ordenService: OrdenService
-    
-  ){}
+
+  ) { }
 
 
-  
+
 
   ngOnInit() {
     this.obtenerMateriales();
@@ -63,15 +63,15 @@ export class AlmacenComponent {
 
   //metodos para manipulacion de las prendas
 
-  eliminarMaterial(id: number){
+  eliminarMaterial(id: number) {
     this.materialService.eliminarMaterial(id).subscribe({
       next: (datos) => this.obtenerMateriales(),
       error: (errores) => console.log(errores)
     });
   }
 
-  accionMaterial(prendaForm: NgForm){
-    if(this.material.idMaterial != 0){
+  accionMaterial(prendaForm: NgForm) {
+    if (this.material.idMaterial != 0) {
       //toca editar
       this.editarMaterial();
     } else {
@@ -82,19 +82,19 @@ export class AlmacenComponent {
     this.btnCerrarPrenda.nativeElement.click();
   }
 
-  agregarMaterial(){
+  agregarMaterial() {
     this.materialService.agregarMaterial(this.material).subscribe(
       {
         next: (datos) => {
           this.router.navigate(['/almacen']);
         },
-        error: (error: any) => {console.log(error)}
+        error: (error: any) => { console.log(error) }
       }
     );
     console.log('material agregado')
   }
 
-  editarMaterial(){
+  editarMaterial() {
     this.materialService.editarMaterial(this.material.idMaterial, this.material).subscribe({
       next: (datos) => console.log('realizado'),
       error: (errores) => console.log(errores)
@@ -106,16 +106,16 @@ export class AlmacenComponent {
 
   }
 
-  limpiarDatosMaterial(){
+  limpiarDatosMaterial() {
     this.material = new Inventario();
     this.inicializarDatosMaterial();
   }
 
-  inicializarDatosMaterial(){
+  inicializarDatosMaterial() {
     this.material.idMaterial = 0;
   }
 
-  cargarMaterial(id: number){
+  cargarMaterial(id: number) {
     this.materialService.obtenerMaterialPorId(id).subscribe(
       {
         next: (datos) => this.material = datos,
@@ -124,7 +124,7 @@ export class AlmacenComponent {
     );
     console.log(id)
   }
-  obtenerMateriales(){
+  obtenerMateriales() {
     this.materialService.obtenerMateriales().subscribe(
       (datos => {
         this.materiales = datos;
@@ -135,103 +135,105 @@ export class AlmacenComponent {
 
 
 
-accionOrden(ordenForm: NgForm){
-  if(this.orden.idOrden != 0){
-    //toca editar
-    this.editarOrden();
-  } 
-  //cerramos el modal
-  this.ordenForm.resetForm();
-  this.btnCerrarOrden.nativeElement.click();
-}
-
-eliminarVistaOrden(){
-  this.ordenService.agregarOrden(this.orden).subscribe(
-    {
-      next: (datos) => {
-        this.router.navigate(['/confeccion']);
-      },
-      error: (error: any) => {console.log(error)}
+  accionOrden(ordenForm: NgForm) {
+    if (this.orden.idOrden != 0) {
+      //toca editar
+      this.editarOrden();
     }
-  );
-  console.log('orden agregada')
-}
-
-editarOrden(){
-  this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-    next: (datos) => console.log('realizado'),
-    error: (errores) => console.log(errores)
-  });
-  this.router.navigate(['/confeccion']).then(() => {
-    this.obtenerOrdenes();
-  })
-
-}
-
-modificarStatus(id: number, ){
-  this.orden.etapa='terminado'
-  this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-    next: (datos) => console.log('realizado'),
-    error: (errores) => console.log(errores)
-  });
-  window.location.reload();
-}
-
-cargarOrden(id: number){
-  this.ordenService.obtenerOrdenPorId(id).subscribe(
-    {
-      next: (datos) => this.orden = datos,
-      error: (errores: any) => console.log(errores)
-    }
-  );
-  console.log(id)
-}
-
-
-
-obtenerOrdenes(){
-  this.ordenService.obtenerOrdenes().subscribe(
-    (datos => {
-      this.ordenes = datos.filter((orden)=>orden.etapa === 'almacen');
-    console.log(this.ordenes)
-    })
-  );
-}
-
-
-
- onFileChange(event: any) {
-  const file = event.target.files[0];
-if (file) {
-this.fileLoaded = true;
+    //cerramos el modal
+    this.ordenForm.resetForm();
+    this.btnCerrarOrden.nativeElement.click();
   }
-}
-entregar() {
-if (this.orden.idOrden) { 
-    this.modificarStatus(this.orden.idOrden);
-}
- }
 
- modificarEtapa(id: number) {
-  // this.cargarOrden(id)  
-  // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
-  if (this.orden.etapa === 'Almacen') {
-    // Cambiar el estado a "Sublimación"
-    this.orden.etapa = 'Terminado';
+  eliminarVistaOrden() {
+    this.ordenService.agregarOrden(this.orden).subscribe(
+      {
+        next: (datos) => {
+          this.router.navigate(['/confeccion']);
+        },
+        error: (error: any) => { console.log(error) }
+      }
+    );
+    console.log('orden agregada')
+  }
 
+  editarOrden() {
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => {
-        console.log('La etapa ha sido modificada a Sublimación');
-        // Recargar la página después de editar la orden
-        window.location.reload();
-      },
-      error: (errores) => console.log('Error al modificar la etapa:', errores)
+      next: (datos) => console.log('realizado'),
+      error: (errores) => console.log(errores)
     });
-  } else {
-    // Si this.orden o this.orden.etapa no son válidos, imprimir un mensaje de error
-    console.log('No se puede cambiar la etapa porque this.orden.etapa no es válido o no es Diseño.');
+    this.router.navigate(['/confeccion']).then(() => {
+      this.obtenerOrdenes();
+    })
+
   }
-}
+
+  modificarStatus(id: number,) {
+    this.orden.estado = 'terminado'
+    this.orden.etapa = 'terminado'
+    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+      next: (datos) => console.log('realizado'),
+      error: (errores) => console.log(errores)
+    });
+    // this.modificarEtapa(id);
+    window.location.reload();
+  }
+
+  cargarOrden(id: number) {
+    this.ordenService.obtenerOrdenPorId(id).subscribe(
+      {
+        next: (datos) => this.orden = datos,
+        error: (errores: any) => console.log(errores)
+      }
+    );
+    console.log(id)
+  }
+
+
+
+  obtenerOrdenes() {
+    this.ordenService.obtenerOrdenes().subscribe(
+      (datos => {
+        this.ordenes = datos.filter((orden) => orden.etapa.toLowerCase() === 'almacen');
+        console.log(this.ordenes)
+      })
+    );
+  }
+
+
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.fileLoaded = true;
+    }
+  }
+  entregar() {
+    if (this.orden.idOrden) {
+      this.modificarStatus(this.orden.idOrden);
+    }
+  }
+
+  modificarEtapa(id: number) {
+    // this.cargarOrden(id)  
+    // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
+    if (this.orden.etapa.toLowerCase() === 'Almacen') {
+      // Cambiar el estado a "Sublimación"
+      this.orden.etapa = 'Terminado';
+
+      this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+        next: (datos) => {
+          console.log('La etapa ha sido modificada a Sublimación');
+          // Recargar la página después de editar la orden
+          window.location.reload();
+        },
+        error: (errores) => console.log('Error al modificar la etapa:', errores)
+      });
+    } else {
+      // Si this.orden o this.orden.etapa no son válidos, imprimir un mensaje de error
+      console.log('No se puede cambiar la etapa porque this.orden.etapa no es válido o no es Diseño.');
+    }
+  }
 
 
 }

@@ -110,7 +110,7 @@ export class ConfeccionComponent {
   modificarEtapa(id: number) {
     // this.cargarOrden(id)  
     // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
-    if (this.orden.etapa === 'Confeccion') {
+    if (this.orden.etapa.toLowerCase() === 'confeccion') {
       // Cambiar el estado a "Sublimación"
       this.orden.etapa = 'Almacen';
   

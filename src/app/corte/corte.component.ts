@@ -71,6 +71,7 @@ export class CorteComponent   {
   }
 
   editarOrden(){
+    // this.modificarEtapa();
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
       next: (datos) => console.log('realizado'),
       error: (errores) => console.log(errores)
@@ -121,9 +122,9 @@ export class CorteComponent   {
   modificarEtapa(id: number) {
     // this.cargarOrden(id)  
     // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
-    if (this.orden.etapa === 'Corte') {
+    if (this.orden.etapa.toLowerCase() === 'corte') {
       // Cambiar el estado a "Sublimación"
-      this.orden.etapa = 'Sublimación';
+      this.orden.etapa = 'Sublimacion';
   
       this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
         next: (datos) => {
