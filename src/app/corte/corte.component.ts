@@ -8,10 +8,11 @@ import { Empleado } from '../models/empleado';
 import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
+import { MovimientosComponent } from '../movimientos/movimientos.component';
 @Component({
   selector: 'app-corte',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MovimientosComponent],
   templateUrl: './corte.component.html',
   styleUrl: './corte.component.css',
 })
