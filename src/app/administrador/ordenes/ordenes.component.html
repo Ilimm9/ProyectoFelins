@@ -429,7 +429,7 @@
               name="fechaEntrega"
               class="form-control"
               [(ngModel)]="orden.fechaEntrega"
-              [min]="fechaMinima"
+              [min]="fechaMinimaEntrega"
               (change)="actualizarFecha($event)"
               required
             />
@@ -475,14 +475,10 @@
               class="form-control"
               [(ngModel)]="orden.total"
               required
+
               disabled
             />
-            @if(!validarPrecio(orden.total) && orden.total){
-            <div class="text-danger">
-              <!-- Mostrar advertencia si campoVacio es true -->
-              Campo obligatorio
-            </div>
-            }
+
             <!--
               obtenerlo de la base de datos 
               <div id="total" class="form-control" >
@@ -513,8 +509,7 @@
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
             } @if(orden.cliente && orden.empleado && orden.prenda &&
-            orden.fechaInicio && orden.fechaEntrega && orden.total &&
-            orden.anticipo){
+            orden.fechaInicio && orden.fechaEntrega && orden.anticipo){
             <button type="submit" class="btn btn-primary">Guardar</button>}
           </div>
         </form>
