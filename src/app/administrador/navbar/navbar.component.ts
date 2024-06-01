@@ -23,9 +23,9 @@ export class NavbarComponent {
 
   depto: String;
 
-  anterior: string
-  password: string
-  confirmacion: string
+  anterior: string = "";
+  password: string = "";
+  confirmacion: string = "";
   estado : string = '';
 
   @ViewChild("passForm") passForm: NgForm;
@@ -108,7 +108,7 @@ export class NavbarComponent {
     this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
       {
         next: (datos) => {
-          this.router.navigate(['/fase/' + (this.empleado.departamentos[0].nombre).toLowerCase()]).then(() => {
+          this.router.navigate(['/' + (this.empleado.departamentos[0].nombre).toLowerCase()]).then(() => {
             this.alertMessage.show('Contraseña Modificada Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 4000 })
             console.log('empleado modificado')
           });
