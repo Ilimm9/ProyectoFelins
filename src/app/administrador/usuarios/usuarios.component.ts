@@ -79,22 +79,22 @@ export class UsuariosComponent {
 
   inicilizarDatosEmpleado() {
     //agregamos estos datos temporalmente para evitar conflictos
-    this.empleado.idUsuario = 0;
-    this.empleado.departamentos.push(new Departamento());
-    this.empleado.departamentos[0].idDepto = 0;
+    this.empleado.curp = "";
+    this.empleado.departamento = new Departamento();
+
   }
 
   limpiarDatosEmpleado() {
     this.empleado = new Empleado();
-    this.empleado.idUsuario = 0;
+    this.empleado.curp = "";
     this.inicilizarDatosEmpleado();
     this.empleadoForm.resetForm();
     this.imagenUrl = "";
     this.previewUrl = "";
   }
 
-  eliminarEmpleado(id: number) {
-    this.empleadoService.eliminarEmpleado(id).subscribe(
+  eliminarEmpleado(curp: string) {
+    this.empleadoService.eliminarEmpleado(curp).subscribe(
       {
         next: (datos) => this.obtenerEmpleados(),
         error: (errores) => console.log(errores)
@@ -104,7 +104,7 @@ export class UsuariosComponent {
 
   accionEmpleado(empleadoForm: NgForm) {
     //verificamos si vamos agregar o editar
-    if (this.empleado.idUsuario != 0) {
+    if (this.empleado.curp !== "") {
       console.log('Editamos')
       this.editarEmpleado();
     } else {
@@ -136,7 +136,7 @@ export class UsuariosComponent {
 
   editarEmpleado() {
     console.log('entramos a guardar los cambios')
-    this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
+    this.empleadoService.editarEmpleado(this.empleado.curp, this.empleado).subscribe(
       {
         next: (datos) => {
           this.router.navigate(['/administracion/usuarios']).then(() => {
@@ -147,7 +147,7 @@ export class UsuariosComponent {
           console.log(datos);
           console.log(this.archivoSeleccionado)
           if (this.archivoSeleccionado != null) {
-            this.subirImagenEmpleado(this.empleado.idUsuario);
+            this.subirImagenEmpleado(this.empleado.curp);
             console.log('imagen cargada en la BD');
           }
         },
@@ -158,16 +158,16 @@ export class UsuariosComponent {
   }
 
   //Al dar clic en editar se carga la variable con los datos del empleado correspondiente
-  cargarEmpleado(id: number) {
-    this.empleado.idUsuario = id;
-    this.empleadoService.obtenerEmpleadoPorId(id).subscribe(
+  cargarEmpleado(curp: string) {
+    this.empleado.curp = curp;
+    this.empleadoService.obtenerEmpleadoPorId(curp).subscribe(
       {
         next: (datos) => this.empleado = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(id)
-    this.obtenerImagenEmpleado(this.empleado.idUsuario);
+    console.log(curp)
+    this.obtenerImagenEmpleado(this.empleado.curp);
     console.log(this.empleado.nombre)
   }
 
@@ -221,9 +221,9 @@ export class UsuariosComponent {
     }
   }
 
-  subirImagenEmpleado(idUsuario: number): void {
+  subirImagenEmpleado(curp: string): void {
     // Asegúrate de que la prenda tenga un ID válido
-    if (!idUsuario) {
+    if (!curp) {
       console.error('La prenda no tiene un ID válido.');
       return;
     }
@@ -233,7 +233,7 @@ export class UsuariosComponent {
       console.log('no se selecciono un archivo')
       return;
     }
-    this.imagenEmpleadoService.agregarImagenEmpleado(idUsuario, this.archivoSeleccionado).subscribe(
+    this.imagenEmpleadoService.agregarImagenEmpleado(curp, this.archivoSeleccionado).subscribe(
       response => {
         console.log('Imagen agregada correctamente a la prenda.');
         // Aquí puedes hacer lo que necesites después de subir la imagen
@@ -242,9 +242,9 @@ export class UsuariosComponent {
     );
   }
 
-  subirImagenEmpleadoAgregar(idUsuario: number): Observable<any> {
+  subirImagenEmpleadoAgregar(curp: string): Observable<any> {
     // Asegúrate de que la prenda tenga un ID válido
-    if (!idUsuario) {
+    if (!curp) {
       console.error('La prenda no tiene un ID válido.');
       return of(null); // Devolver un observable nulo
     }
@@ -254,13 +254,13 @@ export class UsuariosComponent {
       console.log('no se selecciono un archivo');
       return of(null); // Devolver un observable nulo
     }
-    return this.imagenEmpleadoService.agregarImagenEmpleado(idUsuario, this.archivoSeleccionado);
+    return this.imagenEmpleadoService.agregarImagenEmpleado(curp, this.archivoSeleccionado);
   }
 
 
-  obtenerImagenEmpleado(idUsuario: number): void {
+  obtenerImagenEmpleado(curp: string): void {
     console.log('vamos a intentar ver la imagen')
-    this.imagenEmpleadoService.obtenerImagenEmpleado(idUsuario).subscribe(
+    this.imagenEmpleadoService.obtenerImagenEmpleado(curp).subscribe(
       imagen => {
         // Convierte la imagen en una URL para mostrarla en el HTML
         const reader = new FileReader();
@@ -276,8 +276,8 @@ export class UsuariosComponent {
 
   //PARA EL CRUD DE CLIENTES
 
-  eliminarCliente(id: number) {
-    this.clienteService.eliminarCliente(id).subscribe({
+  eliminarCliente(curp: string) {
+    this.clienteService.eliminarCliente(curp).subscribe({
       next: (datos) => this.obtenerClientes(),
       error: (errores) => console.log(errores)
     });
@@ -292,20 +292,20 @@ export class UsuariosComponent {
     console.log(this.clientes)
   }
 
-  cargarCliente(id: number) {
-    this.clienteService.obtenerClientePorId(id).subscribe(
+  cargarCliente(curp: string) {
+    this.clienteService.obtenerClientePorId(curp).subscribe(
       {
         next: (datos) => this.cliente = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(id)
+    console.log(curp)
     console.log(this.cliente.nombre)
   }
 
   accionCliente(clienteForm: NgForm) {
     //verificamos si vamos agregar o editar
-    if (this.cliente.idUsuario != 0) {
+    if (this.cliente.curp !== "") {
       console.log('Editamos')
       this.editarCliente();
     } else {
@@ -333,7 +333,7 @@ export class UsuariosComponent {
 
   editarCliente() {
     console.log('entramos a guardar los cambios')
-    this.clienteService.editarCliente(this.cliente.idUsuario, this.cliente).subscribe(
+    this.clienteService.editarCliente(this.cliente.curp, this.cliente).subscribe(
       {
         next: (datos) => console.log('realizado'),
         error: (errores) => console.log(errores)
@@ -347,7 +347,7 @@ export class UsuariosComponent {
 
   inicilizarDatosCliente() {
     //agregamos estos datos temporalmente para evitar conflictos
-    this.cliente.idUsuario = 0;
+    this.cliente.curp = "";
   }
 
   limpiarDatosCliente() {
@@ -369,27 +369,27 @@ export class UsuariosComponent {
     console.log(this.departamentos)
   }
 
-  eliminarDepto(id: number) {
-    this.departamentoService.eliminarDepartamento(id).subscribe({
+  eliminarDepto(nombre: string) {
+    this.departamentoService.eliminarDepartamento(nombre).subscribe({
       next: (datos) => this.obtenerDepartamentos(),
       error: (errores) => console.log(errores)
     });
   }
 
-  cargarDepto(id: number) {
-    this.departamentoService.obtenerDepartamentoPorId(id).subscribe(
+  cargarDepto(nombre: string) {
+    this.departamentoService.obtenerDepartamentoPorId(nombre).subscribe(
       {
         next: (datos) => this.depto = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(id)
+    console.log(nombre)
     console.log(this.depto.nombre)
   }
 
   accionDepartamento(deptoForm: NgForm) {
     //verificamos si vamos agregar o editar
-    if (this.depto.idDepto != 0) {
+    if (this.depto.nombre !== "") {
       console.log('Editamos')
       this.editarDepto();
     } else {
@@ -417,7 +417,7 @@ export class UsuariosComponent {
 
   editarDepto() {
     console.log('entramos a guardar los cambios')
-    this.departamentoService.editarDepartamento(this.depto.idDepto, this.depto).subscribe(
+    this.departamentoService.editarDepartamento(this.depto.nombre, this.depto).subscribe(
       {
         next: (datos) => console.log('realizado'),
         error: (errores) => console.log(errores)
@@ -431,7 +431,7 @@ export class UsuariosComponent {
 
   inicilizarDatosDepto() {
     //agregamos estos datos temporalmente para evitar conflictos
-    this.depto.idDepto = 0;
+    this.depto.nombre = "";
   }
 
   limpiarDatosDepto() {

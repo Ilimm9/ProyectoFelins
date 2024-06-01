@@ -63,15 +63,15 @@ export class AlmacenComponent {
 
   //metodos para manipulacion de las prendas
 
-  eliminarMaterial(id: number) {
-    this.materialService.eliminarMaterial(id).subscribe({
+  eliminarMaterial(codigo: string) {
+    this.materialService.eliminarMaterial(codigo).subscribe({
       next: (datos) => this.obtenerMateriales(),
       error: (errores) => console.log(errores)
     });
   }
 
   accionMaterial(prendaForm: NgForm) {
-    if (this.material.idMaterial != 0) {
+    if (this.material.codigo !== "") {
       //toca editar
       this.editarMaterial();
     } else {
@@ -95,7 +95,7 @@ export class AlmacenComponent {
   }
 
   editarMaterial() {
-    this.materialService.editarMaterial(this.material.idMaterial, this.material).subscribe({
+    this.materialService.editarMaterial(this.material.codigo, this.material).subscribe({
       next: (datos) => console.log('realizado'),
       error: (errores) => console.log(errores)
     });
@@ -112,17 +112,17 @@ export class AlmacenComponent {
   }
 
   inicializarDatosMaterial() {
-    this.material.idMaterial = 0;
+    this.material.codigo = "";
   }
 
-  cargarMaterial(id: number) {
-    this.materialService.obtenerMaterialPorId(id).subscribe(
+  cargarMaterial(codigo: string) {
+    this.materialService.obtenerMaterialPorId(codigo).subscribe(
       {
         next: (datos) => this.material = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(id)
+    console.log(codigo)
   }
   obtenerMateriales() {
     this.materialService.obtenerMateriales().subscribe(

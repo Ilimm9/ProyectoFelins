@@ -20,15 +20,15 @@ export class InventarioService {
     return this.clienteHttp.post(this.urlBase, material);
   }
 
-  obtenerMaterialPorId(id: number){
-    return this.clienteHttp.get<Inventario>(`${this.urlBase}/${id}`);
+  obtenerMaterialPorId(codigo: string){
+    return this.clienteHttp.get<Inventario>(`${this.urlBase}/${codigo}`);
   }
 
-  editarMaterial(id: number, material: Inventario): Observable<Object>{
-    return this.clienteHttp.put(`${this.urlBase}/${id}`, material);
+  editarMaterial(codigo: string, material: Inventario): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${codigo}`, material);
   }
 
-  eliminarMaterial(id: number): Observable<Object>{
-    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  eliminarMaterial(codigo: string): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${codigo}`);
   }
 }

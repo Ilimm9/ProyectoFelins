@@ -30,16 +30,15 @@ export class LoginComponent {
   ) { }
 
   ngOnInit() {
+    this.obtenerEmpleados();
     if (this.empleadoLoggedService.getIsLogin()) {
-      this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
-      if (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre.toLowerCase() !== 'administracion') {
-        this.router.navigate(['/fase/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
+      this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamento.nombre).toLowerCase()])
+      if (this.empleadoLoggedService.getEmpleado().departamento.nombre.toLowerCase() !== 'administracion') {
+        this.router.navigate(['/fase/' + (this.empleadoLoggedService.getEmpleado().departamento.nombre).toLowerCase()])
       } else {
-        this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamentos[0].nombre).toLowerCase()])
+        this.router.navigate(['/' + (this.empleadoLoggedService.getEmpleado().departamento.nombre).toLowerCase()])
       }    
     }
-    this.obtenerEmpleados();
-
   }
 
   private obtenerEmpleados() {
@@ -52,6 +51,9 @@ export class LoginComponent {
   }
 
   login() {
+    console.log(this.password)
+    console.log(this.usuario)
+    console.log(this.empleados)
     let encontrado = false
     let mensaje = '';
     this.empleados.forEach(empleado => {
@@ -68,10 +70,10 @@ export class LoginComponent {
 
         this.empleadoLoggedService.setEmpleado(empleado);
         this.empleadoLoggedService.setIsLogin(true);
-        if (empleado.departamentos[0].nombre.toLowerCase() !== 'administracion') {
-          this.router.navigate(['/fase/' + (empleado.departamentos[0].nombre).toLowerCase()])
+        if (empleado.departamento.nombre.toLowerCase() !== 'administracion') {
+          this.router.navigate(['/fase/' + (empleado.departamento.nombre).toLowerCase()])
         } else {
-          this.router.navigate(['/' + (empleado.departamentos[0].nombre).toLowerCase()])
+          this.router.navigate(['/' + (empleado.departamento.nombre).toLowerCase()])
         }
 
         //este actualiza la variable bool para login

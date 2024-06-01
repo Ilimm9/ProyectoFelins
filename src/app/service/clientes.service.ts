@@ -20,16 +20,16 @@ export class ClientesService {
     return this.clienteHttp.post(this.urlBase, cliente);
   }
 
-  obtenerClientePorId(id: number){
-    return this.clienteHttp.get<Cliente>(`${this.urlBase}/${id}`);
+  obtenerClientePorId(curp: string){
+    return this.clienteHttp.get<Cliente>(`${this.urlBase}/${curp}`);
   }
 
-  editarCliente(id: number, cliente: Cliente): Observable<Object>{
-    return this.clienteHttp.put(`${this.urlBase}/${id}`, cliente);
+  editarCliente(curp: string, cliente: Cliente): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${curp}`, cliente);
   }
 
-  eliminarCliente(id: number): Observable<Object>{
-    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  eliminarCliente(curp: string): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${curp}`);
   }
 
 

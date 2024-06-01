@@ -118,7 +118,7 @@
             <table class="table table-nowrap">
               <thead class="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Curp</th>
                   <th>Nombre</th>
                   <th>Email</th>
                   <th>telefono</th>
@@ -127,25 +127,23 @@
                 </tr>
               </thead>
               <tbody>
-                @for (empleado of empleados; track empleado.idUsuario) {
+                @for (empleado of empleados; track empleado) {
                 @if(empleado.activo){
                 <tr>
-                  <td>{{ empleado.idUsuario }}</td>
+                  <td>{{ empleado.curp }}</td>
                   <td>
                     {{ empleado.nombre }} {{ empleado.apPaterno }}
                     {{ empleado.apMaterno }}
                   </td>
                   <td>{{ empleado.email }}</td>
                   <td>{{ empleado.telefono }}</td>
-                  <td>
-                    {{ obtenerNombresDepartamentos(empleado.departamentos) }}
-                  </td>
+                  <td> {{empleado.departamento.nombre}} </td>
                   <td>
                     <a
                       class="btn btn-primary my-2 mx-2"
                       data-bs-toggle="modal"
                       data-bs-target="#editarEmpleado"
-                      (click)="cargarEmpleado(empleado.idUsuario)"
+                      (click)="cargarEmpleado(empleado.curp)"
                     >
                       <i class="fas fa-angle-double-right"></i> Editar
                     </a>
@@ -183,36 +181,34 @@
           <table class="table table-nowrap">
             <thead class="table-light">
               <tr>
-                <th>#</th>
+                <th>Curp</th>
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>telefono</th>
-                <th>Ordenes</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              @for (cliente of clientes; track cliente.idUsuario) {
+              @for (cliente of clientes; track cliente) {
               <tr>
-                <td>{{ cliente.idUsuario }}</td>
+                <td>{{ cliente.curp }}</td>
                 <td>
                   {{ cliente.nombre }} {{ cliente.apPaterno }}
                   {{ cliente.apMaterno }}
                 </td>
                 <td>{{ cliente.email }}</td>
                 <td>{{ cliente.telefono }}</td>
-                <td>{{ cliente.totalCompras }}</td>
                 <td>
                   <a
                     class="btn btn-primary mx-2 my-2"
                     data-bs-toggle="modal"
                     data-bs-target="#editarCliente"
-                    (click)="cargarCliente(cliente.idUsuario)"
+                    (click)="cargarCliente(cliente.curp)"
                   >
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
                   <button
-                    (click)="eliminarCliente(cliente.idUsuario)"
+                    (click)="eliminarCliente(cliente.curp)"
                     class="btn btn-danger"
                   >
                     <i class="fa-solid fa-trash"></i> Eliminar
@@ -249,27 +245,27 @@
           <table class="table table-nowrap">
             <thead class="table-light">
               <tr>
-                <th>#</th>
                 <th>Nombre</th>
+                <th>Descripcion</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              @for (depto of departamentos; track depto.idDepto) {
+              @for (depto of departamentos; track depto) {
               <tr>
-                <td>{{ depto.idDepto }}</td>
                 <td>{{ depto.nombre }}</td>
+                <td>{{ depto.descripcion }}</td>
                 <td>
                   <a
                     class="btn btn-primary m-2"
                     data-bs-toggle="modal"
                     data-bs-target="#editarDepto"
-                    (click)="cargarDepto(depto.idDepto)"
+                    (click)="cargarDepto(depto.nombre)"
                   >
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
                   <button
-                    (click)="eliminarDepto(depto.idDepto)"
+                    (click)="eliminarDepto(depto.nombre)"
                     class="btn btn-danger"
                   >
                     <i class="fa-solid fa-trash"></i> Eliminar
@@ -349,9 +345,9 @@
               type="text"
               class="form-control"
               id="domicilioActual"
-              name="domicilioActual"
+              name="domicilio"
               required
-              [(ngModel)]="empleado.domicilioActual"
+              [(ngModel)]="empleado.domicilio"
             />
           </div>
           <div class="mb-3">
@@ -412,7 +408,7 @@
               id="idDepto"
               required
               name="idDepto"
-              [(ngModel)]="empleado.departamentos[0].idDepto"
+              [(ngModel)]="empleado.departamento"
             />
           </div>
           <div class="mb-3 form-check">
@@ -425,7 +421,7 @@
             />
             <label class="form-check-label" for="activo">Activo</label>
           </div>
-          @if(empleado.idUsuario != 0){
+          @if(empleado.curp !== ''){
 
           <div class="my-5">
             <div class="mx-auto w-100">
@@ -466,9 +462,9 @@
           }
 
           <div class="modal-footer">
-            @if(empleado.idUsuario != 0){
+            @if(empleado.curp !== ""){
             <button
-              (click)="eliminarEmpleado(empleado.idUsuario)"
+              (click)="eliminarEmpleado(empleado.curp)"
               class="btn btn-danger"
             >
               <i class="fa-solid fa-trash"></i> Eliminar
@@ -550,7 +546,7 @@
               id="domicilio"
               name="domicilioActual"
               required
-              [(ngModel)]="cliente.domicilioActual"
+              [(ngModel)]="cliente.domicilio"
             />
           </div>
           <div class="mb-3">
@@ -571,17 +567,6 @@
               id="mail"
               name="email"
               [(ngModel)]="cliente.email"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="compras" class="form-label">Ordenes Realizadas</label>
-            <input
-              type="number"
-              class="form-control"
-              id="compras"
-              name="totalCompras"
-              required
-              [(ngModel)]="cliente.totalCompras"
             />
           </div>
           <div class="mb-3">
@@ -645,6 +630,7 @@
               class="form-control"
               [(ngModel)]="depto.nombre"
               required
+              disabled
             />
           </div>
           <div class="mb-3">

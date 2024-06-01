@@ -333,7 +333,7 @@
               required
             >
               <option value="" disabled selected>Seleccione un cliente</option>
-              @for (cliente of clientes; track cliente.idUsuario){
+              @for (cliente of clientes; track cliente){
               <option [ngValue]="cliente">{{ cliente.nombre }}</option>
               }
             </select>
@@ -347,8 +347,8 @@
               [(ngModel)]="orden.empleado"
               required
             >
-              @for (empleado of empleados; track empleado.idUsuario){
-              @if(empleado.departamentos[0].nombre.toLowerCase() ===
+              @for (empleado of empleados; track empleado){
+              @if(empleado.departamento.nombre.toLowerCase() ===
               "administracion"){
               <option [ngValue]="empleado">{{ empleado.nombre }}</option>
               } }

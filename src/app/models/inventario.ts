@@ -1,6 +1,7 @@
 export class Inventario {
-    idMaterial: number;
+    codigo: string;
     nombre: string;
-    metros: number;
-    disponible: boolean;
+    descripcion: string;
+    unidadMedida: string;
+    cantidad: number;
 }

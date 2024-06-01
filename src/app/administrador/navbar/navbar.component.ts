@@ -41,7 +41,7 @@ export class NavbarComponent {
   ngOnInit() {
 
     if (this.empleadoLoggedService.getIsLogin()) {
-      this.obtenerImagenEmpleado(this.empleadoLoggedService?.getEmpleado().idUsuario);
+      this.obtenerImagenEmpleado(this.empleadoLoggedService?.getEmpleado().curp);
       this.nombre = `${this.empleadoLoggedService.getEmpleado().nombre} ${this.empleadoLoggedService.getEmpleado().apPaterno} `;
     } else {
       console.log('usuario nulo')
@@ -50,9 +50,9 @@ export class NavbarComponent {
     
   }
 
-  obtenerImagenEmpleado(idUsuario: number): void {
+  obtenerImagenEmpleado(curp: string): void {
     console.log('vamos a intentar ver la imagen')
-    this.imagenEmpleadoService.obtenerImagenEmpleado(idUsuario).subscribe(
+    this.imagenEmpleadoService.obtenerImagenEmpleado(curp).subscribe(
       imagen => {
         // Convierte la imagen en una URL para mostrarla en el HTML
         const reader = new FileReader();
@@ -105,10 +105,10 @@ export class NavbarComponent {
   editarEmpleado() {
     console.log('entramos a guardar los cambios')
 
-    this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
+    this.empleadoService.editarEmpleado(this.empleado.curp, this.empleado).subscribe(
       {
         next: (datos) => {
-          this.router.navigate(['/' + (this.empleado.departamentos[0].nombre).toLowerCase()]).then(() => {
+          this.router.navigate(['/' + (this.empleado.departamento.nombre).toLowerCase()]).then(() => {
             this.alertMessage.show('Contraseña Modificada Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 4000 })
             console.log('empleado modificado')
           });

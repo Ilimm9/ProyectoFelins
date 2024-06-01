@@ -6,12 +6,7 @@ export class Empleado extends Usuario{
     password: string
     fechaAlta: Date
     activo: boolean
-    departamentos: Departamento[] = [];
+    departamento: Departamento
 
-    // obtenerNombresDepartamentos(): string {
-    //     // Utilizamos map para obtener un array de nombres de departamentos
-    //     const nombres: string[] = this.departamentos.map((depto: Departamento) => depto.nombre);
-    //     // Usamos join para unir los nombres con '|'
-    //     return nombres.join(' | ');
-    // }
+
 }

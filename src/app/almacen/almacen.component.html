@@ -152,27 +152,27 @@
             <table class="table table-nowrap">
               <thead class="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Codigo</th>
                   <th>Nombre</th>
-                  <th>Metros</th>
-                  <th>Disponible</th>
+                  <th>Cantidad</th>
+                  <th>Unidad</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                @for (material of materiales; track material.idMaterial) {
-                @if(material.disponible && material.metros > 0){
+                @for (material of materiales; track material) {
+                @if(material.cantidad > 0){
                 <tr>
-                  <td>{{ material.idMaterial }}</td>
+                  <td>{{ material.codigo }}</td>
                   <td>{{ material.nombre }}</td>
-                  <td>{{ material.metros }}</td>
-                  <td>{{ material.disponible ? "Sí" : "No" }}</td>
+                  <td>{{ material.cantidad }}</td>
+                  <td>{{ material.unidadMedida ? "Sí" : "No" }}</td>
                   <td>
                     <a
                       class="btn btn-primary mx-2 my-2"
                       data-bs-toggle="modal"
                       data-bs-target="#modalMaterial"
-                      (click)="cargarMaterial(material.idMaterial)"
+                      (click)="cargarMaterial(material.codigo)"
                     >
                       <i class="fas fa-angle-double-right"></i> Editar
                     </a>
@@ -294,9 +294,9 @@
               <input
                 type="number"
                 id="metros"
-                name="metros"
+                name="cantidad"
                 class="form-control"
-                [(ngModel)]="material.metros"
+                [(ngModel)]="material.cantidad"
                 required
               />
             </div>
@@ -306,8 +306,9 @@
                   class="form-check-input"
                   type="checkbox"
                   id="disponible"
-                  [(ngModel)]="material.disponible"
-                  name="disponible"
+                  name="unidadMedida"
+                  [(ngModel)]="material.unidadMedida"
+                  
                 />
                 <label class="form-check-label" for="disponible">
                   Disponible
@@ -316,10 +317,10 @@
             </div>
 
             <div class="modal-footer">
-              @if(material.idMaterial != 0){
+              @if(material.codigo !==  ""){
               <button
                 class="btn btn-danger"
-                (click)="eliminarMaterial(material.idMaterial)"
+                (click)="eliminarMaterial(material.codigo)"
               >
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>

@@ -20,16 +20,16 @@ export class EmpleadosService {
     return this.clienteHttp.post(this.urlBase, empleado);
   }
 
-  obtenerEmpleadoPorId(id: number){
-    return this.clienteHttp.get<Empleado>(`${this.urlBase}/${id}`);
+  obtenerEmpleadoPorId(curp: string){
+    return this.clienteHttp.get<Empleado>(`${this.urlBase}/${curp}`);
   }
 
-  editarEmpleado(id: number, empleado: Empleado): Observable<Object>{
-    return this.clienteHttp.put(`${this.urlBase}/${id}`, empleado);
+  editarEmpleado(curp: string, empleado: Empleado): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${curp}`, empleado);
   }
 
-  eliminarEmpleado(id: number): Observable<Object>{
-    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  eliminarEmpleado(curp: string): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${curp}`);
   }
 
 }

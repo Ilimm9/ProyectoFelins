@@ -33,18 +33,16 @@
                 </tr>
               </thead>
               <tbody>
-                @for (empleado of empleados; track empleado.idUsuario) {
+                @for (empleado of empleados; track empleado) {
                 <tr>
-                  <td>{{ empleado.idUsuario }}</td>
+                  <td>{{ empleado.curp }}</td>
                   <td>
                     {{ empleado.nombre }} {{ empleado.apPaterno }}
                     {{ empleado.apMaterno }}
                   </td>
                   <td>{{ empleado.email }}</td>
                   <td>{{ empleado.telefono }}</td>
-                  <td>
-                    {{ obtenerNombresDepartamentos(empleado.departamentos) }}
-                  </td>
+                  <td> {{empleado.departamento}} </td>
                   <td>
                     <a class="btn btn-primary">
                       <i class="fas fa-angle-double-right"></i> Editar
@@ -172,21 +170,19 @@
                   <th>Nombre</th>
                   <th>Email</th>
                   <th>telefono</th>
-                  <th>Ordenes</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                @for (cliente of clientes; track cliente.idUsuario) {
+                @for (cliente of clientes; track cliente) {
                 <tr>
-                  <td>{{ cliente.idUsuario }}</td>
+                  <td>{{ cliente.curp }}</td>
                   <td>
                     {{ cliente.nombre }} {{ cliente.apPaterno }}
                     {{ cliente.apMaterno }}
                   </td>
                   <td>{{ cliente.email }}</td>
                   <td>{{ cliente.telefono }}</td>
-                  <td>{{ cliente.totalCompras }}</td>
                   <td>
                     <a class="btn btn-primary">
                       <i class="fas fa-angle-double-right"></i> Editar
@@ -229,16 +225,14 @@
             <table class="table table-nowrap">
               <thead class="table-light">
                 <tr>
-                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripcion</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                @for (depto of departamentos; track depto.idDepto) {
+                @for (depto of departamentos; track depto) {
                 <tr>
-                  <td>{{ depto.idDepto }}</td>
                   <td>{{ depto.nombre }}</td>
                   <td>{{ depto.descripcion }}</td>
                   <td>

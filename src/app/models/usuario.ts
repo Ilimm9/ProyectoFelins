@@ -1,9 +1,9 @@
 export class Usuario {
-    idUsuario: number
+    curp: string
     nombre: string
     apPaterno: string
     apMaterno: string
-    domicilioActual: string
+    domicilio: string
     telefono: string
     email: string
 }

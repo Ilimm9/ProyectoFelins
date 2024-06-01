@@ -121,15 +121,15 @@ export class HistorialComponent {
   //para empleados
 
 
-  activarEmpleado(id: number) {
-    this.empleado.idUsuario = id;
-    this.empleadoService.obtenerEmpleadoPorId(id).subscribe(
+  activarEmpleado(curp: string) {
+    this.empleado.curp = curp;
+    this.empleadoService.obtenerEmpleadoPorId(curp).subscribe(
       {
         next: (datos) => {
           this.empleado = datos
 
           this.empleado.activo = true;
-          this.empleadoService.editarEmpleado(this.empleado.idUsuario, this.empleado).subscribe(
+          this.empleadoService.editarEmpleado(this.empleado.curp, this.empleado).subscribe(
             {
               next: (datos) => {
                 console.log('datos cambiados');

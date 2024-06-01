@@ -20,16 +20,16 @@ export class DepartamentosService {
     return this.clienteHttp.post(this.urlBase, departamento);
   }
 
-  obtenerDepartamentoPorId(id: number){
-    return this.clienteHttp.get<Departamento>(`${this.urlBase}/${id}`);
+  obtenerDepartamentoPorId(nombre: string){
+    return this.clienteHttp.get<Departamento>(`${this.urlBase}/${nombre}`);
   }
 
-  editarDepartamento(id: number, departamento: Departamento): Observable<Object>{
-    return this.clienteHttp.put(`${this.urlBase}/${id}`, departamento);
+  editarDepartamento(nombre: string, departamento: Departamento): Observable<Object>{
+    return this.clienteHttp.put(`${this.urlBase}/${nombre}`, departamento);
   }
 
-  eliminarDepartamento(id: number): Observable<Object>{
-    return this.clienteHttp.delete(`${this.urlBase}/${id}`);
+  eliminarDepartamento(nombre: string): Observable<Object>{
+    return this.clienteHttp.delete(`${this.urlBase}/${nombre}`);
   }
 
 }

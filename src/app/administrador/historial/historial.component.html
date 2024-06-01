@@ -214,7 +214,7 @@
             <table class="table table-nowrap">
               <thead class="table-light">
                 <tr>
-                  <th>#</th>
+                  <th>Curp</th>
                   <th>Nombre</th>
                   <th>Email</th>
                   <th>telefono</th>
@@ -223,25 +223,23 @@
                 </tr>
               </thead>
               <tbody>
-                @for (empleado of empleados; track empleado.idUsuario) {
+                @for (empleado of empleados; track empleado) {
                 @if(!empleado.activo){
                 <tr>
-                  <td>{{ empleado.idUsuario }}</td>
+                  <td>{{ empleado.curp }}</td>
                   <td>
                     {{ empleado.nombre }} {{ empleado.apPaterno }}
                     {{ empleado.apMaterno }}
                   </td>
                   <td>{{ empleado.email }}</td>
                   <td>{{ empleado.telefono }}</td>
-                  <td>
-                    {{ obtenerNombresDepartamentos(empleado.departamentos) }}
-                  </td>
+                  <td> {{empleado.departamento}} </td>
                   <td>
                     <a
                       class="btn btn-primary my-2 mx-2"
                       data-bs-toggle="modal"
                       data-bs-target="#editarEmpleado"
-                      (click)="activarEmpleado(empleado.idUsuario)"
+                      (click)="activarEmpleado(empleado.curp)"
                     >
                       <i class="fas fa-angle-double-right"></i> Activar
                     </a>
