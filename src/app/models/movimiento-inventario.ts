@@ -9,4 +9,5 @@ export class MovimientoInventario {
     tipoMov: string;
     cantidadMov: number;
     razon: string; 
+    estado: string;
 }
