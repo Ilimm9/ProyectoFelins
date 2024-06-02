@@ -9,6 +9,7 @@ import { Orden } from '../../models/orden';
 import { Empleado } from '../../models/empleado';
 import { EmpleadosService } from '../../service/empleados.service';
 import { Departamento } from '../../models/departamento';
+import { EmpleadoLoggedService } from '../../service/empleado-logged.service';
 
 @Component({
   selector: 'app-historial',
@@ -31,16 +32,14 @@ export class HistorialComponent {
   empleado: Empleado = new Empleado();
 
 
-  @ViewChild("prendaForm") prendaForm: NgForm
-  @ViewChild("botonCerrarPrenda") btnCerrarPrenda: ElementRef
-
   @ViewChild("ordenForm") ordenForm: NgForm
   @ViewChild("botonCerrarOrden") btnCerrarOrden: ElementRef
 
   constructor(private prendaService: PrendaService,
     private empleadoService: EmpleadosService,
     private ordenService: OrdenService,
-    private router: Router
+    private router: Router,
+    private empleadoLoggedService: EmpleadoLoggedService
   ) {
 
   }
@@ -53,10 +52,7 @@ export class HistorialComponent {
     this.orden.prenda = new Prenda();
     this.orden.empleado = new Empleado();
   }
-
-
-
-
+  
   accionOrden(ordenForm: NgForm) {
     if (this.orden.idOrden != 0) {
       //toca editar
@@ -67,17 +63,17 @@ export class HistorialComponent {
     this.btnCerrarOrden.nativeElement.click();
   }
 
-  eliminarVistaOrden() {
-    this.ordenService.agregarOrden(this.orden).subscribe(
-      {
-        next: (datos) => {
-          this.router.navigate(['/diseño']);
-        },
-        error: (error: any) => { console.log(error) }
-      }
-    );
-    console.log('orden agregada')
-  }
+  // eliminarVistaOrden() {
+  //   this.ordenService.agregarOrden(this.orden).subscribe(
+  //     {
+  //       next: (datos) => {
+  //         this.router.navigate(['/diseño']);
+  //       },
+  //       error: (error: any) => { console.log(error) }
+  //     }
+  //   );
+  //   console.log('orden agregada')
+  // }
 
   editarOrden() {
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
@@ -90,14 +86,14 @@ export class HistorialComponent {
 
   }
 
-  modificarStatus(id: number,) {
-    this.orden.etapa = 'sublimacion'
-    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
-      error: (errores) => console.log(errores)
-    });
-    window.location.reload();
-  }
+  // modificarStatus(id: number,) {
+  //   this.orden.etapa = 'sublimacion'
+  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+  //     next: (datos) => console.log('realizado'),
+  //     error: (errores) => console.log(errores)
+  //   });
+  //   window.location.reload();
+  // }
 
   cargarOrden(id: number) {
     this.ordenService.obtenerOrdenPorId(id).subscribe(
@@ -120,7 +116,6 @@ export class HistorialComponent {
 
   //para empleados
 
-
   activarEmpleado(curp: string) {
     this.empleado.curp = curp;
     this.empleadoService.obtenerEmpleadoPorId(curp).subscribe(
@@ -132,9 +127,10 @@ export class HistorialComponent {
           this.empleadoService.editarEmpleado(this.empleado.curp, this.empleado).subscribe(
             {
               next: (datos) => {
-                console.log('datos cambiados');
-                this.router.navigate(['/administracion/historial']);
-                window.location.reload();
+                this.router.navigate(["/administracion/historial"]).then(() => {
+                  this.obtenerEmpleados();
+                })
+                console.log('realizado')
               },
               error: (errores) => console.log(errores)
             }
@@ -148,21 +144,13 @@ export class HistorialComponent {
   }
 
 
-  private obtenerEmpleados() {
+  obtenerEmpleados() {
     this.empleadoService.obtenerEmpleados().subscribe(
       (datos => {
-        this.empleados = datos;
+        this.empleados = datos.filter((empleado) => empleado.activo === false);
       })
     );
     console.log(this.empleados);
   }
-
-  obtenerNombresDepartamentos(depto: Departamento[]): string {
-    // Utilizamos map para obtener un array de nombres de departamentos
-    const nombres: string[] = depto.map((depto: Departamento) => depto.nombre);
-    // Usamos join para unir los nombres con '|'
-    return nombres.join(' | ');
-  }
-
 
 }

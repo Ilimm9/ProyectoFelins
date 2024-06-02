@@ -19,9 +19,10 @@
               <thead class="table-light">
                 <tr>
                   <th>#</th>
-                  <th>Nombre</th>
+                  <th>Titulo Prenda</th>
                   <th>Cantidad</th>
-                  <th>Fecha de entrega</th>
+                  <th>Etapa</th>
+                  <th>Estado</th>
                   <th>Opciones</th>
                   <th></th>
                 </tr>
@@ -32,6 +33,7 @@
                   <td>{{ orden.idOrden }}</td>
                   <td>{{ orden.prenda.titulo }}</td>
                   <td>{{ orden.prenda.cantidad }}</td>
+                  <td>{{ orden.etapa }}</td>
                   <td>{{ orden.estado }}</td>
                   <td>
                     <a
@@ -79,13 +81,14 @@
         <form #ordenForm="ngForm" (ngSubmit)="accionOrden(ordenForm)">
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <textarea
+            <input
               id="nombre"
-              name="descripcion"
+              name="cliente"
               class="form-control"
               [(ngModel)]="orden.cliente.nombre"
               required
-            ></textarea>
+              disabled
+            />
           </div>
           <div class="mb-3">
             <label for="titulo" class="form-label">Prenda</label>
@@ -100,14 +103,14 @@
           </div>
           <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
-            <input
+            <textarea
               type="text"
               id="descripcion"
               name="descripcion"
               class="form-control"
               [(ngModel)]="orden.prenda.descripcion"
               disabled
-            />
+            ></textarea>
           </div>
 
           <div class="my-5">
@@ -143,18 +146,6 @@
             <button type="submit" class="btn btn-success">Entregar</button>
             }
           </div>
-
-          <!--               
-            @if(fileLoaded){
-                <button
-                class="btn btn-success mt-3"
-                (click)="modificarStatus(orden.idOrden)"
-              >
-                Entregar
-              </button>
-              }
-            </div>
-          </div> -->
         </form>
       </div>
     </div>

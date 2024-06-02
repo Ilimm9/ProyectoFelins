@@ -9,6 +9,7 @@ import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
 import { MovimientosComponent } from '../movimientos/movimientos.component';
+import { EmpleadoLoggedService } from '../service/empleado-logged.service';
 @Component({
   selector: 'app-corte',
   standalone: true,
@@ -36,7 +37,8 @@ export class CorteComponent   {
 
   constructor(private prendaService: PrendaService, 
     private ordenService: OrdenService,
-    private router: Router
+    private router: Router,
+    private empleadoLoggedService: EmpleadoLoggedService,
   ){
 
   }
@@ -59,38 +61,43 @@ export class CorteComponent   {
     this.btnCerrarOrden.nativeElement.click();
   }
 
-  eliminarVistaOrden(){
-    this.ordenService.agregarOrden(this.orden).subscribe(
-      {
-        next: (datos) => {
-          this.router.navigate(['/diseño']);
-        },
-        error: (error: any) => {console.log(error)}
-      }
-    );
-    console.log('orden agregada')
-  }
+  // eliminarVistaOrden(){
+  //   this.ordenService.agregarOrden(this.orden).subscribe(
+  //     {
+  //       next: (datos) => {
+  //         this.router.navigate(['/diseño']);
+  //       },
+  //       error: (error: any) => {console.log(error)}
+  //     }
+  //   );
+  //   console.log('orden agregada')
+  // }
 
   editarOrden(){
-    // this.modificarEtapa();
+    this.orden.etapa = 'Sublimacion'
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
+      next: (datos) => {
+        this.router.navigate(['fase/' + this.empleadoLoggedService.getEmpleado().departamento.nombre.toLowerCase()]).then(() => {
+          this.obtenerOrdenes();
+        })
+        console.log('realizado')
+      },
       error: (errores) => console.log(errores)
     });
-    this.router.navigate(['/diseño']).then(() => {
-      this.obtenerOrdenes();
-    })
+    // this.router.navigate(['/diseño']).then(() => {
+    //   this.obtenerOrdenes();
+    // })
 
   }
 
-  modificarStatus(id: number, ){
-    this.orden.etapa='sublimacion'
-    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
-      error: (errores) => console.log(errores)
-    });
-    window.location.reload();
-  }
+  // modificarEtapa(){
+  //   this.orden.etapa='sublimacion'
+  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+  //     next: (datos) => console.log('realizado'),
+  //     error: (errores) => console.log(errores)
+  //   });
+  //   window.location.reload();
+  // }
 
   cargarOrden(id: number){
     this.ordenService.obtenerOrdenPorId(id).subscribe(
@@ -111,38 +118,28 @@ export class CorteComponent   {
     );
   }
 
-  // modificarEtapa(id:number){
-  //    this.orden.etapa = 'Corte' 
-  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-  //     next: (orden) => console.log('Sublimacion'),
-  //     error: (errores) => console.log(errores)
-  //   });
-  //   window.location.reload();
+  // modificarEtapa(id: number) {
+  //   // this.cargarOrden(id)  
+  //   // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
+  //   if (this.orden.etapa.toLowerCase() === 'corte') {
+  //     // Cambiar el estado a "Sublimación"
+  //     this.orden.etapa = 'Sublimacion';
+  
+  //     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+  //       next: (datos) => {
+  //         console.log('La etapa ha sido modificada a Sublimación');
+  //         // Recargar la página después de editar la orden
+  //         window.location.reload();
+  //       },
+  //       error: (errores) => console.log('Error al modificar la etapa:', errores)
+  //     });
+  //   } else {
+  //     // Si this.orden o this.orden.etapa no son válidos, imprimir un mensaje de error
+  //     console.log('No se puede cambiar la etapa porque this.orden.etapa no es válido o no es Diseño.');
+  //   }
+
   // }
   
-  modificarEtapa(id: number) {
-    // this.cargarOrden(id)  
-    // Verificar si this.orden está definido y si this.orden.etapa tiene un valor válido
-    if (this.orden.etapa.toLowerCase() === 'corte') {
-      // Cambiar el estado a "Sublimación"
-      this.orden.etapa = 'Sublimacion';
-  
-      this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-        next: (datos) => {
-          console.log('La etapa ha sido modificada a Sublimación');
-          // Recargar la página después de editar la orden
-          window.location.reload();
-        },
-        error: (errores) => console.log('Error al modificar la etapa:', errores)
-      });
-    } else {
-      // Si this.orden o this.orden.etapa no son válidos, imprimir un mensaje de error
-      console.log('No se puede cambiar la etapa porque this.orden.etapa no es válido o no es Diseño.');
-    }
-  }
-  
-
-
 
 }
 

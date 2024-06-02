@@ -8,6 +8,7 @@ import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
 import { ImgPrendaService } from '../service/img-prenda.service';
+import { EmpleadoLoggedService } from '../service/empleado-logged.service';
 
 
 @Component({
@@ -28,13 +29,8 @@ export class DisenioComponent {
   clientes: Cliente[];
   empleados: Empleado[];
 
-  @ViewChild("prendaForm") prendaForm: NgForm
-  @ViewChild("botonCerrarPrenda") btnCerrarPrenda: ElementRef
-
   @ViewChild("ordenForm") ordenForm: NgForm
   @ViewChild("botonCerrarOrden") btnCerrarOrden: ElementRef
-
-  fileLoaded: boolean = false;
 
   imagenUrl: string; // Variable para almacenar la URL de la imagen
   // Define una variable para almacenar el archivo globalmente
@@ -44,7 +40,8 @@ export class DisenioComponent {
   constructor(private prendaService: PrendaService,
     private ordenService: OrdenService,
     private router: Router,
-    private imgPrendaService: ImgPrendaService
+    private imgPrendaService: ImgPrendaService,
+    private empleadoLoggedService: EmpleadoLoggedService
   ) {
 
   }
@@ -67,10 +64,15 @@ export class DisenioComponent {
   }
 
   editarOrden() {
-    this.modificarStatus();
+    this.orden.etapa = 'Corte';
     console.log('se edita la etapa: ')
     this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
+      next: (datos) => {
+        this.router.navigate(['fase/' + this.empleadoLoggedService.getEmpleado().departamento.nombre.toLowerCase()]).then(() => {
+          this.obtenerOrdenes();
+        })
+        console.log('realizado')
+      },
       error: (errores) => console.log(errores)
     });
     console.log('editamos solo la imagen')
@@ -79,10 +81,10 @@ export class DisenioComponent {
       
       console.log('imagen cambiada');
     }
-    this.router.navigate(['/diseño']).then(() => {
-      window.location.reload();
-      this.obtenerOrdenes();
-    })
+    // this.router.navigate(['/diseño']).then(() => {
+    //   // window.location.reload();
+    //   this.obtenerOrdenes();
+    // })
 
   }
 
@@ -139,14 +141,14 @@ export class DisenioComponent {
     );
   }
 
-  modificarStatus() {
-    this.orden.etapa='corte'
-    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-      next: (datos) => console.log('realizado'),
-      error: (errores) => console.log(errores)
-    });
-    window.location.reload();
-  }
+  // modificarEtapa() {
+  //   this.orden.etapa='corte'
+  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+  //     next: (datos) => console.log('realizado'),
+  //     error: (errores) => console.log(errores)
+  //   });
+  //   window.location.reload();
+  // }
 
 
 }

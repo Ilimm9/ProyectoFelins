@@ -21,6 +21,15 @@ import { Orden } from '../../models/orden';
   styleUrl: './usuarios.component.css'
 })
 export class UsuariosComponent {
+
+  //manejar modales 
+  mdEmpleado: string = 'agregar';
+  mdCliente: string = 'agregar';
+  mdDepto: string = 'agregar';
+
+  //manejar tablas
+  tabla: string = ''
+
   departamentos: Departamento[]
   clientes: Cliente[]
   empleados: Empleado[]
@@ -52,7 +61,6 @@ export class UsuariosComponent {
   }
 
   imagenUrl: string; // Variable para almacenar la URL de la imagen
-  // Define una variable para almacenar el archivo globalmente
   archivoSeleccionado: File | null = null;
   previewUrl: string | null = null;
 
@@ -78,33 +86,44 @@ export class UsuariosComponent {
   //PARA EL CRUD DE EMPLEADOS
 
   inicilizarDatosEmpleado() {
-    //agregamos estos datos temporalmente para evitar conflictos
+    this.mdEmpleado = 'agregar';
+    this.empleado = new Empleado();
     this.empleado.curp = "";
     this.empleado.departamento = new Departamento();
+    this.imagenUrl = "";
+    this.previewUrl = "";
 
   }
 
-  limpiarDatosEmpleado() {
-    this.empleado = new Empleado();
-    this.empleado.curp = "";
-    this.inicilizarDatosEmpleado();
+  resetFormEmpleado() {
     this.empleadoForm.resetForm();
     this.imagenUrl = "";
     this.previewUrl = "";
   }
 
-  eliminarEmpleado(curp: string) {
+  eliminarEmpleado(curp: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
     this.empleadoService.eliminarEmpleado(curp).subscribe(
       {
-        next: (datos) => this.obtenerEmpleados(),
+        next: (datos) => {
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerEmpleados();
+            this.alertMessage.show('Empleado Eliminado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('empleado modificado')
+          });
+        },
         error: (errores) => console.log(errores)
       }
     );
+    //cerramos el modal
+    this.resetFormEmpleado();
+    this.cerrarModalEmpleado();
   }
 
   accionEmpleado(empleadoForm: NgForm) {
-    //verificamos si vamos agregar o editar
-    if (this.empleado.curp !== "") {
+    this.tabla = 'empleado'
+    if (this.mdEmpleado === "editar") {
       console.log('Editamos')
       this.editarEmpleado();
     } else {
@@ -112,7 +131,7 @@ export class UsuariosComponent {
       this.agregarEmpleado();
     }
     //cerramos el modal
-    this.empleadoForm.resetForm();
+    this.resetFormEmpleado();
     this.cerrarModalEmpleado();
   }
 
@@ -131,11 +150,12 @@ export class UsuariosComponent {
         error: (error: any) => { console.log(error) }
       }
     );
-    
+
   }
 
   editarEmpleado() {
     console.log('entramos a guardar los cambios')
+    let curp = this.empleado.curp;
     this.empleadoService.editarEmpleado(this.empleado.curp, this.empleado).subscribe(
       {
         next: (datos) => {
@@ -147,11 +167,14 @@ export class UsuariosComponent {
           console.log(datos);
           console.log(this.archivoSeleccionado)
           if (this.archivoSeleccionado != null) {
-            this.subirImagenEmpleado(this.empleado.curp);
+            this.subirImagenEmpleado(curp);
             console.log('imagen cargada en la BD');
           }
         },
-        error: (errores) => console.log(errores)
+        error: (errores) => {
+          console.log(errores);
+          this.alertMessage.show('Error al modificar!! ', { cssClass: 'alert alert-danger', timeOut: 3000 })
+        }
       }
     );
 
@@ -159,6 +182,7 @@ export class UsuariosComponent {
 
   //Al dar clic en editar se carga la variable con los datos del empleado correspondiente
   cargarEmpleado(curp: string) {
+    this.mdEmpleado = 'editar';
     this.empleado.curp = curp;
     this.empleadoService.obtenerEmpleadoPorId(curp).subscribe(
       {
@@ -193,13 +217,6 @@ export class UsuariosComponent {
     console.log(this.empleados);
   }
 
-  obtenerNombresDepartamentos(depto: Departamento[]): string {
-    // Utilizamos map para obtener un array de nombres de departamentos
-    const nombres: string[] = depto.map((depto: Departamento) => depto.nombre);
-    // Usamos join para unir los nombres con '|'
-    return nombres.join(' | ');
-  }
-
   private cerrarModalEmpleado() {
     this.botonCerrarEmpleado.nativeElement.click();
   }
@@ -223,6 +240,7 @@ export class UsuariosComponent {
 
   subirImagenEmpleado(curp: string): void {
     // Asegúrate de que la prenda tenga un ID válido
+    console.log(curp)
     if (!curp) {
       console.error('La prenda no tiene un ID válido.');
       return;
@@ -242,22 +260,6 @@ export class UsuariosComponent {
     );
   }
 
-  subirImagenEmpleadoAgregar(curp: string): Observable<any> {
-    // Asegúrate de que la prenda tenga un ID válido
-    if (!curp) {
-      console.error('La prenda no tiene un ID válido.');
-      return of(null); // Devolver un observable nulo
-    }
-
-    // Llama al servicio para agregar la imagen a la prenda en la base de datos
-    if (this.archivoSeleccionado == null) {
-      console.log('no se selecciono un archivo');
-      return of(null); // Devolver un observable nulo
-    }
-    return this.imagenEmpleadoService.agregarImagenEmpleado(curp, this.archivoSeleccionado);
-  }
-
-
   obtenerImagenEmpleado(curp: string): void {
     console.log('vamos a intentar ver la imagen')
     this.imagenEmpleadoService.obtenerImagenEmpleado(curp).subscribe(
@@ -276,11 +278,23 @@ export class UsuariosComponent {
 
   //PARA EL CRUD DE CLIENTES
 
-  eliminarCliente(curp: string) {
+  eliminarCliente(curp: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.clienteService.eliminarCliente(curp).subscribe({
-      next: (datos) => this.obtenerClientes(),
+      next: (datos) =>  {
+        this.router.navigate(['/administracion/usuarios']).then(() => {
+          this.obtenerClientes();
+          this.alertMessage.show('Cliente Eliminado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+          console.log('cliente eliminado')
+        });
+
+      },
       error: (errores) => console.log(errores)
     });
+    this.resetFormCliente();
+    this.botonCerrarCliente.nativeElement.click();
   }
 
   private obtenerClientes() {
@@ -293,19 +307,19 @@ export class UsuariosComponent {
   }
 
   cargarCliente(curp: string) {
+    this.mdCliente = 'editar';
+    this.cliente.curp = curp;
     this.clienteService.obtenerClientePorId(curp).subscribe(
       {
         next: (datos) => this.cliente = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(curp)
-    console.log(this.cliente.nombre)
   }
 
   accionCliente(clienteForm: NgForm) {
-    //verificamos si vamos agregar o editar
-    if (this.cliente.curp !== "") {
+    this.tabla = 'cliente'
+    if (this.mdCliente === 'editar') {
       console.log('Editamos')
       this.editarCliente();
     } else {
@@ -313,7 +327,7 @@ export class UsuariosComponent {
       this.agregarCliente();
     }
     //cerramos el modal
-    this.clienteForm.resetForm();
+    this.resetFormCliente();
     this.botonCerrarCliente.nativeElement.click();
 
   }
@@ -322,8 +336,13 @@ export class UsuariosComponent {
     this.clienteService.agregarCliente(this.cliente).subscribe(
       {
         next: (datos) => {
-          //son los datos regresados pero por el momento no se ocupan
-          this.router.navigate(['/administracion/usuarios']);
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerClientes();
+            this.alertMessage.show('Cliente Agregado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('cliente agregado')
+          });
+          console.log(datos);
+
         },
         error: (error: any) => { console.log(error) }
       }
@@ -335,25 +354,32 @@ export class UsuariosComponent {
     console.log('entramos a guardar los cambios')
     this.clienteService.editarCliente(this.cliente.curp, this.cliente).subscribe(
       {
-        next: (datos) => console.log('realizado'),
+        next: (datos) => {
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerClientes();
+            this.alertMessage.show('Cliente Modificado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('cliente modificado')
+          });
+          console.log(datos);
+
+        },
         error: (errores) => console.log(errores)
       }
     );
-    this.router.navigate(['/administracion/usuarios']).then(() => {
-      // window.location.reload();
-      this.obtenerClientes();
-    })
   }
 
   inicilizarDatosCliente() {
-    //agregamos estos datos temporalmente para evitar conflictos
+    this.mdCliente = 'agregar';
+    this.cliente = new Cliente();
     this.cliente.curp = "";
+    this.imagenUrl = "";
+    this.previewUrl = "";
   }
 
-  limpiarDatosCliente() {
-    this.cliente = new Cliente();
-    this.inicilizarDatosCliente();
+  resetFormCliente() {
     this.clienteForm.resetForm();
+    this.imagenUrl = "";
+    this.previewUrl = "";
 
   }
 
@@ -369,27 +395,40 @@ export class UsuariosComponent {
     console.log(this.departamentos)
   }
 
-  eliminarDepto(nombre: string) {
+  eliminarDepto(nombre: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.departamentoService.eliminarDepartamento(nombre).subscribe({
-      next: (datos) => this.obtenerDepartamentos(),
+      next: (datos) => {
+        this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerDepartamentos();
+            this.alertMessage.show('Departamento Eliminado Exitosamente!!!', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('empleado modificado')
+          });
+
+      },
       error: (errores) => console.log(errores)
     });
+    //cerramos el modal
+    this.deptoForm.resetForm();
+    this.botonCerrarDepto.nativeElement.click();
   }
 
   cargarDepto(nombre: string) {
+    this.mdDepto = "editar";
+    this.depto.nombre = nombre;
     this.departamentoService.obtenerDepartamentoPorId(nombre).subscribe(
       {
         next: (datos) => this.depto = datos,
         error: (errores: any) => console.log(errores)
       }
     );
-    console.log(nombre)
-    console.log(this.depto.nombre)
   }
 
   accionDepartamento(deptoForm: NgForm) {
     //verificamos si vamos agregar o editar
-    if (this.depto.nombre !== "") {
+    if (this.mdDepto === 'editar') {
       console.log('Editamos')
       this.editarDepto();
     } else {
@@ -406,37 +445,42 @@ export class UsuariosComponent {
     this.departamentoService.agregarDepartamento(this.depto).subscribe(
       {
         next: (datos) => {
-          //son los datos regresados pero por el momento no se ocupan
-          this.router.navigate(['/administracion/usuarios']);
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerDepartamentos();
+            this.alertMessage.show('Departamento Agregado ', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('departamento agregado')
+          });
+
         },
         error: (error: any) => { console.log(error) }
       }
     );
-    console.log('departamento agregado')
   }
 
   editarDepto() {
     console.log('entramos a guardar los cambios')
     this.departamentoService.editarDepartamento(this.depto.nombre, this.depto).subscribe(
       {
-        next: (datos) => console.log('realizado'),
+        next: (datos) => {
+          this.router.navigate(['/administracion/usuarios']).then(() => {
+            this.obtenerDepartamentos();
+            this.alertMessage.show('Departamento Modificado', { cssClass: 'alert alert-success', timeOut: 3000 })
+            console.log('departamento modificado')
+          });
+
+        },
         error: (errores) => console.log(errores)
       }
     );
-    this.router.navigate(['/administracion/usuarios']).then(() => {
-      // window.location.reload();
-      this.obtenerDepartamentos();
-    })
   }
 
   inicilizarDatosDepto() {
-    //agregamos estos datos temporalmente para evitar conflictos
+    this.mdDepto = "agregar"
+    this.depto = new Departamento();
     this.depto.nombre = "";
   }
 
-  limpiarDatosDepto() {
-    this.depto = new Departamento();
-    this.inicilizarDatosDepto();
+  resetFormDepto() {
     this.deptoForm.resetForm();
   }
 

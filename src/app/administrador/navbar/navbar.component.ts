@@ -41,6 +41,7 @@ export class NavbarComponent {
   ngOnInit() {
 
     if (this.empleadoLoggedService.getIsLogin()) {
+      console.log('usuario en session')
       this.obtenerImagenEmpleado(this.empleadoLoggedService?.getEmpleado().curp);
       this.nombre = `${this.empleadoLoggedService.getEmpleado().nombre} ${this.empleadoLoggedService.getEmpleado().apPaterno} `;
     } else {

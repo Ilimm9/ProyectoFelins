@@ -1,7 +1,6 @@
 <!-- Container fluid -->
 <div class="bg-primary pt-20 pb-21"></div>
 <div class="container-fluid mt-n22 px-6">
-  
   <div class="row">
     <div class="col-lg-12 col-md-12 col-12">
       <!-- Page header -->
@@ -101,9 +100,12 @@
                 <i class="fa-solid fa-users mx-2"></i> Listado de Empleados
               </h4>
             </div>
+            @if(tabla === 'empleado'){
             <div>
               <jjwins-alert-messages> </jjwins-alert-messages>
             </div>
+            }
+
             <div class="ml-auto">
               <a
                 class="btn btn-primary"
@@ -137,7 +139,7 @@
                   </td>
                   <td>{{ empleado.email }}</td>
                   <td>{{ empleado.telefono }}</td>
-                  <td> {{empleado.departamento.nombre}} </td>
+                  <td>{{ empleado.departamento.nombre }}</td>
                   <td>
                     <a
                       class="btn btn-primary my-2 mx-2"
@@ -167,6 +169,11 @@
           <div class="mt-2">
             <h4><i class="fa-solid fa-users mx-2"></i> Listado de Clientes</h4>
           </div>
+          @if(tabla === 'cliente'){
+          <div>
+            <jjwins-alert-messages> </jjwins-alert-messages>
+          </div>
+          }
           <div class="ml-auto">
             <a
               class="btn btn-primary"
@@ -207,12 +214,6 @@
                   >
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
-                  <button
-                    (click)="eliminarCliente(cliente.curp)"
-                    class="btn btn-danger"
-                  >
-                    <i class="fa-solid fa-trash"></i> Eliminar
-                  </button>
                 </td>
               </tr>
               }
@@ -231,6 +232,11 @@
               <i class="fa-solid fa-building"></i> Listado de Departamentos
             </h4>
           </div>
+          @if(tabla === 'departamento'){
+          <div>
+            <jjwins-alert-messages> </jjwins-alert-messages>
+          </div>
+          }
           <div class="ml-auto">
             <a
               class="btn btn-primary"
@@ -264,12 +270,6 @@
                   >
                     <i class="fas fa-angle-double-right"></i> Editar
                   </a>
-                  <button
-                    (click)="eliminarDepto(depto.nombre)"
-                    class="btn btn-danger"
-                  >
-                    <i class="fa-solid fa-trash"></i> Eliminar
-                  </button>
                 </td>
               </tr>
               }
@@ -288,12 +288,19 @@
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
-  (hidden.bs.modal)="limpiarDatosEmpleado()"
+  (hidden.bs.modal)="inicilizarDatosEmpleado()"
 >
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
+        @if(mdEmpleado === 'agregar'){
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Agregar Empleado
+        </h1>
+        } @else {
         <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Empleado</h1>
+        }
+
         <button
           type="button"
           class="btn-close"
@@ -304,6 +311,33 @@
       </div>
       <div class="modal-body">
         <form #empleadoForm="ngForm" (ngSubmit)="accionEmpleado(empleadoForm)">
+          @if(mdEmpleado === 'agregar'){
+          <div class="mb-3">
+            <label for="curp-add" class="form-label">Curp</label>
+            <input
+              type="text"
+              class="form-control"
+              id="curp-add"
+              name="curp"
+              required
+              [(ngModel)]="empleado.curp"
+            />
+          </div>
+          } @else {
+          <div class="mb-3">
+            <label for="curp-update" class="form-label">Curp</label>
+            <input
+              type="text"
+              class="form-control"
+              id="curp-update"
+              name="curp"
+              required
+              [(ngModel)]="empleado.curp"
+              disabled
+            />
+          </div>
+          }
+
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
             <input
@@ -381,11 +415,11 @@
             />
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
+            <label for="password-1" class="form-label">Contraseña</label>
             <input
               type="password"
               class="form-control"
-              id="password"
+              id="password-1"
               name="password"
               [(ngModel)]="empleado.password"
             />
@@ -401,14 +435,16 @@
             />
           </div>
           <div class="mb-3">
-            <label for="id-depto" class="form-label">Id de departamento</label>
+            <label for="id-depto" class="form-label"
+              >Nombre de departamento</label
+            >
             <input
-              type="number"
+              type="text"
               class="form-control"
               id="idDepto"
               required
-              name="idDepto"
-              [(ngModel)]="empleado.departamento"
+              name="departamento"
+              [(ngModel)]="empleado.departamento.nombre"
             />
           </div>
           <div class="mb-3 form-check">
@@ -421,7 +457,8 @@
             />
             <label class="form-check-label" for="activo">Activo</label>
           </div>
-          @if(empleado.curp !== ''){
+
+          @if(mdEmpleado !== 'agregar'){
 
           <div class="my-5">
             <div class="mx-auto w-100">
@@ -464,7 +501,7 @@
           <div class="modal-footer">
             @if(empleado.curp !== ""){
             <button
-              (click)="eliminarEmpleado(empleado.curp)"
+              (click)="eliminarEmpleado(empleado.curp, $event)"
               class="btn btn-danger"
             >
               <i class="fa-solid fa-trash"></i> Eliminar
@@ -485,12 +522,17 @@
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
-  (hidden.bs.modal)="limpiarDatosCliente()"
+  (hidden.bs.modal)="inicilizarDatosCliente()"
 >
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Clientes</h1>
+        @if(mdCliente === 'agregar'){
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Cliente</h1>
+        }@else {
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Cliente</h1>
+        }
+
         <button
           type="button"
           class="btn-close"
@@ -501,6 +543,32 @@
       </div>
       <div class="modal-body">
         <form #clienteForm="ngForm" (ngSubmit)="accionCliente(clienteForm)">
+          @if(mdCliente === 'editar'){
+          <div class="mb-3">
+            <label for="curp-update-cli" class="form-label">Curp</label>
+            <input
+              type="text"
+              class="form-control"
+              id="curp-update-cli"
+              name="curp"
+              required
+              [(ngModel)]="cliente.curp"
+              disabled
+            />
+          </div>
+          } @else {
+          <div class="mb-3">
+            <label for="curp-add-cli" class="form-label">Curp</label>
+            <input
+              type="text"
+              class="form-control"
+              id="curp-add-cli"
+              name="curp"
+              required
+              [(ngModel)]="cliente.curp"
+            />
+          </div>
+          }
           <div class="mb-3">
             <label for="nom-cliente" class="form-label">Nombre</label>
             <input
@@ -582,14 +650,15 @@
           </div>
 
           <div class="modal-footer">
+            @if(mdCliente !== 'agregar'){
             <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              (click)="limpiarDatosCliente()"
+              (click)="eliminarCliente(cliente.curp, $event)"
+              class="btn btn-danger"
             >
-              Cancelar
+              <i class="fa-solid fa-trash"></i> Eliminar
             </button>
+            }
+
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
@@ -605,7 +674,7 @@
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
-  (hidden.bs.modal)="limpiarDatosDepto()"
+  (hidden.bs.modal)="inicilizarDatosDepto()"
 >
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -623,6 +692,16 @@
         <form #deptoForm="ngForm" (ngSubmit)="accionDepartamento(deptoForm)">
           <div class="mb-3">
             <label for="nombre-dep" class="form-label">Nombre</label>
+            @if(mdDepto === 'agregar'){
+            <input
+              type="text"
+              id="nombre-dep"
+              name="nombre"
+              class="form-control"
+              [(ngModel)]="depto.nombre"
+              required
+            />
+            } @else {
             <input
               type="text"
               id="nombre-dep"
@@ -632,6 +711,7 @@
               required
               disabled
             />
+            }
           </div>
           <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
@@ -644,14 +724,15 @@
             ></textarea>
           </div>
           <div class="modal-footer">
+            @if(mdDepto !== 'agregar'){
             <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              (click)="limpiarDatosDepto()"
+              (click)="eliminarDepto(depto.nombre, $event)"
+              class="btn btn-danger"
             >
-              Cancelar
+              <i class="fa-solid fa-trash"></i> Eliminar
             </button>
+            }
+
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>

@@ -102,10 +102,10 @@
             />
           </div>
           <div class="mb-3">
-            <label for="titulo" class="form-label">Prenda</label>
+            <label for="prenda" class="form-label">Prenda</label>
             <input
               type="text"
-              id="titulo"
+              id="prenda"
               name="prenda"
               class="form-control"
               [(ngModel)]="orden.prenda.titulo"
@@ -113,10 +113,10 @@
             />
           </div>
           <div class="mb-3">
-            <label for="titulo" class="form-label">Descripción</label>
+            <label for="descrip" class="form-label">Descripción</label>
             <input
               type="text"
-              id="titulo"
+              id="descrip"
               name="descripcion"
               class="form-control"
               [(ngModel)]="orden.prenda.descripcion"
@@ -224,7 +224,7 @@
               </thead>
               <tbody>
                 @for (empleado of empleados; track empleado) {
-                @if(!empleado.activo){
+                <!-- @if(!empleado.activo){ -->
                 <tr>
                   <td>{{ empleado.curp }}</td>
                   <td>
@@ -233,7 +233,7 @@
                   </td>
                   <td>{{ empleado.email }}</td>
                   <td>{{ empleado.telefono }}</td>
-                  <td> {{empleado.departamento}} </td>
+                  <td> {{empleado.departamento.nombre}} </td>
                   <td>
                     <a
                       class="btn btn-primary my-2 mx-2"
@@ -245,7 +245,7 @@
                     </a>
                   </td>
                 </tr>
-                } }
+                } 
               </tbody>
             </table>
           </div>
