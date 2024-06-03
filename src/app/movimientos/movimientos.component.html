@@ -7,24 +7,27 @@
         <div class="card">
           <div class="card-header bg-white py-4 d-flex justify-content-between">
             <div class="mt-2">
-              <h4><i class="fa-solid fa-users mx-2"></i> Ordenes Pendientes</h4>
+              <h4><i class="fa-solid fa-users mx-2"></i> Solicitud de Material</h4>
             </div>
-            <div class="ml-auto">
+            <!-- botones salida y entrada -->
+             <div class="ml-auto">
+              @if(!EmpleadoAlmacen()){
               <a
                 class="btn btn-primary mx-2"
                 data-bs-toggle="modal"
-                data-bs-target="#editarEmpleado"
+                data-bs-target="#modalSolicitudMaterial"
               >
                 <i class="fa-solid fa-plus"></i> Salida
-              </a>
-              <a
+              </a>}
+
+              <!-- <a
                 class="btn btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#editarEmpleado"
               >
                 <i class="fa-solid fa-plus"></i> Entrada
-              </a>
-            </div>
+              </a> -->
+            </div> 
           </div>
           <div
             class="table-responsive"
@@ -39,37 +42,37 @@
                   <th>Tipo</th>
                   <th>Cantidad</th>
                   <th>Fecha</th>
+                  <th>Estado</th>
                   <th>Opcion</th>
                 </tr>
               </thead>
               <tbody>
-                @for (mov of movimientos; track movimiento.clave) {
+                @for (mov of movimientos; track movimiento) {
                 <tr>
                   <td>{{ mov.clave }}</td>
                   <td>{{ mov.empleado.nombre }}</td>
                   <td>{{ mov.inventario.nombre }}</td>
                   <td>{{ mov.tipoMov }}</td>
                   <td>{{ mov.cantidadMov }}</td>
-                  <td>{{ mov.fechaMov }}</td>
+                  <td>{{ mov.fechaMov | date : "longDate" }}</td>
+                  <td>{{ mov.estado }}</td>
                   <td>
-                    <a
-                      class="btn btn-primary mx-2 my-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalOrden"
-                      (click)="cargarMovimiento(mov.clave)"
-                    >
-                      <i class="icon-xs me-2 fa-regular fa-eye"></i> Ver
-                      Detalles
-                    </a>
-                  </td>
-                  <td>
-                    <!-- <button
+                    @if(EmpleadoAlmacen()){
+                      <button
                 class="btn btn-success mt-3"
-                (click)="modificarEtapa(orden.idOrden)"
-
+                data-bs-toggle="modal"
+                data-bs-target="#modalAceptarMaterial"
+                (click) = "cargarDatos(mov.clave, mov.inventario.codigo)"
               >
-                Orden terminada
-              </button> -->
+            Ver Detalles
+          </button>
+                    }@else if(mov.estado !== 'Cancelada' && mov.estado !== 'Aceptada'){
+                     <button
+                class="btn btn-danger mt-3"
+                (click) = "cancelar(mov.clave)"
+              >
+            Cancelar
+          </button>} 
                   </td>
                 </tr>
                 }
@@ -78,6 +81,185 @@
           </div>
         </div>
       </section>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal para solicitar material  -->
+<div
+  class="modal fade"
+  id="modalSolicitudMaterial"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #botonCerrarSolicitud
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #solicitudForm="ngForm" (ngSubmit)="accionMovimiento()">
+          <div class="mb-3">
+            <label for="inventario" class="form-label">Seleccione material</label>
+            <select
+              id="material"
+              name="inventario"
+              class="form-control"
+              [(ngModel)]="movimiento.inventario"
+              required
+            >
+            <option value="" disabled selected>Seleccione un material</option>
+              @for (inventario of inventarios; track inventario){
+              <option [ngValue]="inventario">{{ inventario.nombre }}</option>
+              }</select>
+          </div>
+          <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input
+              type="text"
+              id="fecha"
+              name="fechaMov"
+              class="form-control"
+              [(ngModel)]="movimiento.fechaMov"
+              required
+            />
+          </div>  
+          <div class="mb-3">
+            <label for="razon" class="form-label">Razon</label>
+            <textarea
+              type="text"
+              id="razon"
+              name="razon"
+              class="form-control"
+              [(ngModel)]="movimiento.razon"
+              required
+            ></textarea>
+          </div> 
+          <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad</label>
+            <input
+              type="number"
+              id="cantidad"
+              name="cantidadMov"
+              class="form-control"
+              [(ngModel)]="movimiento.cantidadMov"
+              required
+            />
+          </div> 
+          <div class="modal-footer">
+            <button
+              class="btn btn-success mt-3"
+            >
+              Cancelar
+            </button>
+              <button
+              class="btn btn-success mt-3" 
+            >
+              Enviar solicitud de material
+            </button>
+          </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal para aceptar material  -->
+<div
+  class="modal fade"
+  id="modalAceptarMaterial"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #botonCerrarConfirmacion
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #confirmacionForm="ngForm" (ngSubmit)="editarMaterial()">
+          <div class="mb-3">
+            <label for="inventario" class="form-label">Material solicitado</label>
+            <input
+              id="material2"
+              name="inventario"
+              class="form-control"
+              [(ngModel)]="inventario.nombre"
+              disabled
+            >
+          </div><div class="mb-3">
+            <label for="razon" class="form-label">Solicitante</label>
+            <textarea
+              type="text"
+              id="solicitante"
+              name="curp"
+              class="form-control"
+              [(ngModel)]="movimiento.empleado.curp"
+              disable
+            ></textarea>
+          </div> 
+          <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input
+              type="text"
+              id="fecha2"
+              name="fechaMov"
+              class="form-control"
+              [(ngModel)]="movimiento.fechaMov"
+              disabled
+            />
+          </div>  
+          <div class="mb-3">
+            <label for="razon" class="form-label">Razon</label>
+            <textarea
+              type="text"
+              id="razon2"
+              name="razon"
+              class="form-control"
+              [(ngModel)]="movimiento.razon"
+              disable
+            ></textarea>
+          </div> 
+          <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad</label>
+            <input
+              type="number"
+              id="cantidad"
+              name="cantidadMov"
+              class="form-control"
+              [(ngModel)]="movimiento.cantidadMov"
+              disabled
+            />
+          </div> 
+          <div class="modal-footer">
+           <button
+              class="btn btn-success mt-3" 
+            >
+              Aceptar Solicitud
+            </button>
+          </div>
+          </form>
+      </div>
     </div>
   </div>
 </div>

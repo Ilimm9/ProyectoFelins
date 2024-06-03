@@ -12,23 +12,23 @@ export class MovimientoService {
 
   constructor(private clienteHttp: HttpClient) { }
 
-  obtenerMateriales():Observable<MovimientoInventario[]> {
+  obtenerMovimiento():Observable<MovimientoInventario[]> {
     return this.clienteHttp.get<MovimientoInventario[]>(this.urlBase);
   }
 
-  agregarMaterial(movimiento: MovimientoInventario): Observable<Object>{
+  agregarMovimiento(movimiento: MovimientoInventario): Observable<Object>{
     return this.clienteHttp.post(this.urlBase, movimiento);
   }
 
-  obtenerMaterialPorId(codigo: string){
+  obtenerMovimientoPorId(codigo: string){
     return this.clienteHttp.get<MovimientoInventario>(`${this.urlBase}/${codigo}`);
   }
 
-  editarMaterial(codigo: string, movimiento: MovimientoInventario): Observable<Object>{
+  editarMovimiento(codigo: string, movimiento: MovimientoInventario): Observable<Object>{
     return this.clienteHttp.put(`${this.urlBase}/${codigo}`, movimiento);
   }
 
-  eliminarMaterial(codigo: string): Observable<Object>{
+  eliminarMovimiento(codigo: string): Observable<Object>{
     return this.clienteHttp.delete(`${this.urlBase}/${codigo}`);
   }
 }

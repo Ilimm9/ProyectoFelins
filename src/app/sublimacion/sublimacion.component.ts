@@ -8,11 +8,12 @@ import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
 import { EmpleadoLoggedService } from '../service/empleado-logged.service';
+import { MovimientosComponent } from '../movimientos/movimientos.component';
 
 @Component({
   selector: 'app-sublimacion',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,MovimientosComponent],
   templateUrl: './sublimacion.component.html',
   styleUrl: './sublimacion.component.css'
 })

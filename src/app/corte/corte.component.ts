@@ -10,6 +10,7 @@ import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
 import { MovimientosComponent } from '../movimientos/movimientos.component';
 import { EmpleadoLoggedService } from '../service/empleado-logged.service';
+
 @Component({
   selector: 'app-corte',
   standalone: true,
@@ -28,12 +29,22 @@ export class CorteComponent   {
   clientes: Cliente[];
   empleados: Empleado[];
 
+  accion: string = '';
+  accionmaterial: string ='';
+
+  setAccion(accion: string) {
+    this.accion = accion;
+  }
+
 
   @ViewChild("prendaForm") prendaForm: NgForm
   @ViewChild("botonCerrarPrenda") btnCerrarPrenda: ElementRef
 
   @ViewChild("ordenForm") ordenForm: NgForm
+  @ViewChild("solicitudForm") solicitudForm: NgForm
   @ViewChild("botonCerrarOrden") btnCerrarOrden: ElementRef
+  @ViewChild("botonCerrarSolicitud") botonCerrarSolicitud: ElementRef
+
 
   constructor(private prendaService: PrendaService, 
     private ordenService: OrdenService,
@@ -51,27 +62,29 @@ export class CorteComponent   {
   }
 
 
+
+  
   accionOrden(ordenForm: NgForm){
     if(this.orden.idOrden != 0){
+      if (this.accion === "entregar"){
+      console.log(this.orden);
+        this.editarOrden();
+      }else if (this.accion === "material"){
+        console.log(this.orden);
+        if(this.accionmaterial === '1'){
+          this.editarStatusAlmacen();
+          this.solicitudForm.resetForm();
+          this.botonCerrarSolicitud.nativeElement.click();
+
+        }
+        }
+        this.accionmaterial = '1';
       //toca editar
-      this.editarOrden();
     } 
     //cerramos el modal
     this.ordenForm.resetForm();
     this.btnCerrarOrden.nativeElement.click();
   }
-
-  // eliminarVistaOrden(){
-  //   this.ordenService.agregarOrden(this.orden).subscribe(
-  //     {
-  //       next: (datos) => {
-  //         this.router.navigate(['/diseño']);
-  //       },
-  //       error: (error: any) => {console.log(error)}
-  //     }
-  //   );
-  //   console.log('orden agregada')
-  // }
 
   editarOrden(){
     this.orden.etapa = 'Sublimacion'
@@ -90,14 +103,24 @@ export class CorteComponent   {
 
   }
 
-  // modificarEtapa(){
-  //   this.orden.etapa='sublimacion'
-  //   this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
-  //     next: (datos) => console.log('realizado'),
-  //     error: (errores) => console.log(errores)
-  //   });
-  //   window.location.reload();
-  // }
+  editarStatusAlmacen(){
+    this.orden.etapa='corte'
+    this.orden.estado= 'En Solicitud'
+    this.ordenService.editarOrden(this.orden.idOrden, this.orden).subscribe({
+      next: (datos) => {
+        this.router.navigate(['fase/' + this.empleadoLoggedService.getEmpleado().departamento.nombre.toLowerCase()]).then(() => {
+          this.obtenerOrdenes();
+        })
+        console.log('realizado')
+      },
+      error: (errores) => console.log(errores)
+    });
+    // this.router.navigate(['/diseño']).then(() => {
+    //   this.obtenerOrdenes();
+    // })
+
+  }
+
 
   cargarOrden(id: number){
     this.ordenService.obtenerOrdenPorId(id).subscribe(

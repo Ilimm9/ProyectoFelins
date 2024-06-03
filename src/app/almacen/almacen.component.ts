@@ -10,11 +10,12 @@ import { Empleado } from '../models/empleado';
 import { OrdenService } from '../service/orden.service';
 import { EmpleadoLoggedService } from '../service/empleado-logged.service';
 import { AlertMessagesModule, AlertMessagesService } from 'jjwins-angular-alert-messages';
+import { MovimientosComponent } from '../movimientos/movimientos.component';
 
 @Component({
   selector: 'app-almacen',
   standalone: true,
-  imports: [FormsModule, AlertMessagesModule],
+  imports: [FormsModule, AlertMessagesModule,MovimientosComponent],
   templateUrl: './almacen.component.html',
   styleUrl: './almacen.component.css'
 })

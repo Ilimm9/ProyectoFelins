@@ -462,7 +462,7 @@
             />
             @if(validarEstado(orden.estado) && orden.estado){
             <div class="text-danger">
-              Ingrese un estado valido (En proceso, Pendiente)
+              Ingrese un estado valido (En progreso, Pendiente)
             </div>
             }
           </div>
@@ -495,8 +495,8 @@
               [(ngModel)]="orden.anticipo"
               required
             />
-            @if(!validarPrecio(orden.anticipo) && !orden.anticipo){
-            <div class="text-danger">Campo obligatorio</div>
+            @if(!validarAnticipo(orden.anticipo)){
+            <div class="text-danger">Introduzca una cantidad valida</div>
             }
           </div>
 

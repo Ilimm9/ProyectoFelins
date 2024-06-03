@@ -408,6 +408,10 @@ validarCantidades(cantidad: number): boolean {
 validarPrecio(cantidad: number): boolean {
   return cantidad > 0;
 }
-
-
+validarAnticipo(cantidad: number): boolean {
+  if (typeof this.orden.total !== 'number' || isNaN(this.orden.total)) {
+    return false;
+  }
+    return cantidad > 0 && cantidad <= this.orden.total;
+}
 }

@@ -8,11 +8,12 @@ import { PrendaService } from '../service/prenda.service';
 import { OrdenService } from '../service/orden.service';
 import { Router } from '@angular/router';
 import { EmpleadoLoggedService } from '../service/empleado-logged.service';
+import { MovimientosComponent } from '../movimientos/movimientos.component';
 
 @Component({
   selector: 'app-confeccion',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MovimientosComponent],
   templateUrl: './confeccion.component.html',
   styleUrl: './confeccion.component.css'
 })
